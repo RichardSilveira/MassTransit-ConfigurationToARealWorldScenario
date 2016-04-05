@@ -1,0 +1,9 @@
+The user send a order;
+The order is received;
+The order could be rejected;
+The pizza is about to be prepared;
+The pizza is done;
+
+Use Sagas State machine over order status updates;
+Schedule messages to user when his order is about five minutos to be done;
+Schedule messages to user when his order is done (through pizza status update to 'done');
