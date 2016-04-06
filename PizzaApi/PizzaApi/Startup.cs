@@ -30,7 +30,7 @@ namespace PizzaApi
 
             _configuration.EnableSwagger(c =>
             {
-                c.SingleApiVersion("v1", "REST Pizza");
+                c.SingleApiVersion("v1", "MassTransit Configuration Sample");
                 c.IncludeXmlComments(GetXmlCommentsPath());
             }).EnableSwaggerUi();
 
@@ -39,8 +39,8 @@ namespace PizzaApi
 
         protected static string GetXmlCommentsPath()
         {
-            return System.String.Format(@"{0}\RESTPizza.XML",
-                    System.AppDomain.CurrentDomain.BaseDirectory);
+            return String.Format(@"{0}\PizzaApi.XML",
+                    AppDomain.CurrentDomain.BaseDirectory);
         }
 
         private void ConfigureWebApi()

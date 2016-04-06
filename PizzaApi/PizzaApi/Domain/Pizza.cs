@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace PizzaApi.Domain
 {
     public class Pizza
     {
-        public Guid PizzaID { get; protected set; }
+        [Key]
+        public int PizzaID { get; protected set; }
 
+        [Required]
         public string Name { get; protected set; }
 
+        [Required]
         public string Ingredients { get; set; }
 
         public Pizza(string name, string ingredients)
@@ -24,6 +24,11 @@ namespace PizzaApi.Domain
 
             Name = name;
             Ingredients = ingredients;
+        }
+
+        public Pizza()
+        {
+            //For EF Only
         }
     }
 }

@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace PizzaApi.DAL
 {
-    public class PizzaContext : DbContext
+    public class OrderContext : DbContext
     {
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Order> Orders { get; set; }
 
-        public PizzaContext()
+        public OrderContext()
             : base("PizzaContext")
         {
-            //Database.SetInitializer<PizzaContext>(new CreateDatabaseIfNotExists<PizzaContext>());
+            Database.SetInitializer(new CreateDatabaseIfNotExists<OrderContext>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
