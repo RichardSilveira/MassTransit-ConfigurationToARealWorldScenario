@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\PizzaApi.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -106,13 +107,13 @@
     <Compile Include="Application\DTO\PizzaDTO.cs" />
     <Compile Include="Application\OrderController.cs" />
     <Compile Include="Application\PizzaController.cs" />
-    <Compile Include="DAL\PizzaContext.cs" />
+    <Compile Include="DAL\OrderContext.cs" />
     <Compile Include="Domain\Order.cs" />
     <Compile Include="Domain\OrderStatus.cs" />
     <Compile Include="Domain\Pizza.cs" />
-    <Compile Include="Migrations\201604061659217_Migration.cs" />
-    <Compile Include="Migrations\201604061659217_Migration.Designer.cs">
-      <DependentUpon>201604061659217_Migration.cs</DependentUpon>
+    <Compile Include="Migrations\201604211420151_Migration.cs" />
+    <Compile Include="Migrations\201604211420151_Migration.Designer.cs">
+      <DependentUpon>201604211420151_Migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
@@ -120,12 +121,20 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201604061659217_Migration.resx">
-      <DependentUpon>201604061659217_Migration.cs</DependentUpon>
+    <Content Include="orderpizzalocaldb.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201604211420151_Migration.resx">
+      <DependentUpon>201604211420151_Migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

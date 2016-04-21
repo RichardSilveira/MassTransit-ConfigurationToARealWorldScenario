@@ -32,6 +32,7 @@ namespace PizzaApi
             {
                 c.SingleApiVersion("v1", "MassTransit Configuration Sample");
                 c.IncludeXmlComments(GetXmlCommentsPath());
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             }).EnableSwaggerUi();
 
             app.UseWebApi(_configuration);

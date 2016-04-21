@@ -13,7 +13,7 @@ namespace PizzaApi.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201604061659217_Migration"; }
+            get { return "201604211420151_Migration"; }
         }
         
         string IMigrationMetadata.Source

@@ -21,6 +21,7 @@ namespace PizzaApi.Application
         private OrderContext _context;
         private DbSet<Pizza> _dbSet;
         private string _baseUri;
+
         public PizzaController()
         {
             _context = new OrderContext();
@@ -67,6 +68,7 @@ namespace PizzaApi.Application
 
             return Ok(pizzaDTO);
         }
+
         /// <summary>
         /// Create new Pizza
         /// </summary>

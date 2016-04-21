@@ -14,9 +14,9 @@ namespace PizzaApi.Migrations
                         OrderID = c.Int(nullable: false, identity: true),
                         CustomerName = c.String(nullable: false, maxLength: 4000),
                         CustomerPhone = c.String(nullable: false, maxLength: 4000),
-                        SenhaEspera = c.Int(),
-                        EstimatedTime = c.Decimal(precision: 18, scale: 2),
+                        EstimatedTime = c.Int(),
                         Status = c.Int(nullable: false),
+                        RejectedReasonPhrase = c.String(maxLength: 4000),
                         PizzaID = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.OrderID);
