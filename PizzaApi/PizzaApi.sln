@@ -5,6 +5,12 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaApi", "PizzaApi\PizzaApi.csproj", "{E9506BFA-ED58-4A96-A414-A8017FAD954E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaApi.MessageContracts", "PizzaApi.MessageContracts\PizzaApi.MessageContracts.csproj", "{7763E5AF-2FAC-49A6-BB9B-DFFB94D07371}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaApi.StateMachines", "PizzaApi.StateMachines\PizzaApi.StateMachines.csproj", "{91EC5F10-1964-4353-AC0C-574B314C2A83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaApi.WindowsService", "PizzaApi.WindowsService\PizzaApi.WindowsService.csproj", "{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{E9506BFA-ED58-4A96-A414-A8017FAD954E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9506BFA-ED58-4A96-A414-A8017FAD954E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9506BFA-ED58-4A96-A414-A8017FAD954E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7763E5AF-2FAC-49A6-BB9B-DFFB94D07371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7763E5AF-2FAC-49A6-BB9B-DFFB94D07371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7763E5AF-2FAC-49A6-BB9B-DFFB94D07371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7763E5AF-2FAC-49A6-BB9B-DFFB94D07371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91EC5F10-1964-4353-AC0C-574B314C2A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91EC5F10-1964-4353-AC0C-574B314C2A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91EC5F10-1964-4353-AC0C-574B314C2A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91EC5F10-1964-4353-AC0C-574B314C2A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
