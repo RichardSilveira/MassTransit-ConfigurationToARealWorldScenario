@@ -8,6 +8,8 @@ namespace PizzaApi.MessageContracts
 {
     public interface IRegisterOrderCommand
     {
+        Guid CorrelationId { get; }
+
         string CustomerName { get; }
         string CustomerPhone { get; }
         int PizzaID { get; }
