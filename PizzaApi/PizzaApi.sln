@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaApi.StateMachines", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaApi.WindowsService", "PizzaApi.WindowsService\PizzaApi.WindowsService.csproj", "{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaDesktopApp.Attendant", "PizzaDesktopApp.Attendant\PizzaDesktopApp.Attendant.csproj", "{9282801F-3A89-4786-9920-9F6C48A17EE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6201C88E-5FCD-4FE9-AFBC-6E8F60CFE9D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9282801F-3A89-4786-9920-9F6C48A17EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9282801F-3A89-4786-9920-9F6C48A17EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9282801F-3A89-4786-9920-9F6C48A17EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9282801F-3A89-4786-9920-9F6C48A17EE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
