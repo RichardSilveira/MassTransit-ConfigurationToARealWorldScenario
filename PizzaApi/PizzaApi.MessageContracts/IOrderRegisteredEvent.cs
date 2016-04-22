@@ -8,20 +8,10 @@ namespace PizzaApi.MessageContracts
 {
     public interface IOrderRegisteredEvent
     {
-        Guid EventId { get; }
+        Guid EventID { get; }
 
+        string CustomerName { get; }
+        string CustomerPhone { get; }
+        int PizzaID { get; }
     }
 }
-//public int OrderID { get; set; }
-
-//public string CustomerName { get; set; }
-
-//public string CustomerPhone { get; set; }
-
-//public int? EstimatedTime { get; set; }
-
-//public string StatusDescription { get; set; }
-
-//public string RejectedReasonPhrase { get; set; }
-
-//public int PizzaID { get; set; }

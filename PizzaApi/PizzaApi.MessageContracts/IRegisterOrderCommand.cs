@@ -8,7 +8,7 @@ namespace PizzaApi.MessageContracts
 {
     public interface IRegisterOrderCommand
     {
-        Guid? EventId { get; }
+        Guid? EventID { get; }
 
         string CustomerName { get; }
         string CustomerPhone { get; }

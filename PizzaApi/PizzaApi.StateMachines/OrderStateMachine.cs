@@ -16,10 +16,10 @@ namespace PizzaApi.StateMachines
 
             Event(() => RegisterOrder,
                 cc => cc.CorrelateBy(order => order.CorrelationId,
-                                    context => context.Message.EventId)
-                        .SelectId(context => context.Message.EventId.Value));
+                                    context => context.Message.EventID)
+                        .SelectId(context => context.Message.EventID.Value));
 
-            Event(() => OrderRegistered, cc => cc.CorrelateById(context => context.Message.EventId));
+            Event(() => OrderRegistered, cc => cc.CorrelateById(context => context.Message.EventID));
 
             Initially(
                 When(RegisterOrder)
