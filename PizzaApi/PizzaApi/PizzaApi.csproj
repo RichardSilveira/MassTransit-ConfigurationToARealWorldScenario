@@ -142,7 +142,12 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PizzaApi.MessageContracts\PizzaApi.MessageContracts.csproj">
+      <Project>{7763e5af-2fac-49a6-bb9b-dffb94d07371}</Project>
+      <Name>PizzaApi.MessageContracts</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="orderpizzalocaldb.sdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

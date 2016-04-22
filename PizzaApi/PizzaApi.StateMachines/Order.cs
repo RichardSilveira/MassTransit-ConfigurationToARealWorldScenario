@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PizzaApi.StateMachines
 {
-    public class OrderSagaState : SagaStateMachineInstance
+    public class Order : SagaStateMachineInstance
     {
         public Guid CorrelationId { get; set; }
         public State CurrentState { get; set; }

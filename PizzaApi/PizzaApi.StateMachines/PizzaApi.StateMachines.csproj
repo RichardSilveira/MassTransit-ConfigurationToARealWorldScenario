@@ -67,12 +67,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="OrderSagaState.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="OrderRegisteredEvent.cs" />
+    <Compile Include="OrderStateMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PizzaApi.MessageContracts\PizzaApi.MessageContracts.csproj">
+      <Project>{7763e5af-2fac-49a6-bb9b-dffb94d07371}</Project>
+      <Name>PizzaApi.MessageContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

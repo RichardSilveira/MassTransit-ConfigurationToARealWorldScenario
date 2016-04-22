@@ -13,6 +13,7 @@ using Swashbuckle.Swagger.Annotations;
 using System.Net;
 using PizzaApi.DAL;
 using System.Data.Entity;
+using PizzaApi.MessageContracts;
 
 namespace PizzaApi.Application
 {
@@ -84,15 +85,29 @@ namespace PizzaApi.Application
         [HttpPost]
         public async Task<IHttpActionResult> RegiterNew(OrderDTO orderDTO)
         {
-            var order = new Order(orderDTO.CustomerName, orderDTO.CustomerPhone, orderDTO.PizzaID);
+            var bus = BusConfigurator.ConfigureBus();
+            var sendToUri = new Uri(RabbitMqConstants.RabbitMqUri + RabbitMqConstants.SagaQueue);
+            var endPoint = await bus.GetSendEndpoint(sendToUri);
 
-            _dbSet.Add(order);
-            await _context.SaveChangesAsync();
+            await endPoint.Send<IRegisterOrderCommand>(new
+            {
+                CorrelationId = Guid.NewGuid(),
+                CustomerName = orderDTO.CustomerName,
+                CustomerPhone = orderDTO.CustomerPhone,
+                PizzaID = orderDTO.PizzaID
+            });
 
-            orderDTO = (OrderDTO)new OrderDTO().InjectFrom(order);
-            orderDTO.StatusDescription = ((OrderStatus)order.Status).ToString();
+            return StatusCode(HttpStatusCode.Accepted);
 
-            return Created(new Uri(_baseUri + orderDTO.OrderID), orderDTO);
+            //var order = new Order(orderDTO.CustomerName, orderDTO.CustomerPhone, orderDTO.PizzaID);
+
+            //_dbSet.Add(order);
+            //await _context.SaveChangesAsync();
+
+            //orderDTO = (OrderDTO)new OrderDTO().InjectFrom(order);
+            //orderDTO.StatusDescription = ((OrderStatus)order.Status).ToString();
+
+            //return Created(new Uri(_baseUri + orderDTO.OrderID), orderDTO);
         }
 
         /// <summary>
