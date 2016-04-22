@@ -10,9 +10,9 @@ namespace PizzaDesktopApp.Attendant
 {
     public class OrderRegisteredConsumer : IConsumer<IOrderRegisteredEvent>
     {
-        public Task Consume(ConsumeContext<IOrderRegisteredEvent> context)
+        public async Task Consume(ConsumeContext<IOrderRegisteredEvent> context)
         {
-            throw new NotImplementedException();
+            await Console.Out.WriteLineAsync("Registered event consumed" + context.Message.CustomerName);
         }
     }
 }
