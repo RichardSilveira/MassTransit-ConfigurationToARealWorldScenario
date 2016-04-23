@@ -91,7 +91,7 @@ namespace PizzaApi.Application
 
             await endPoint.Send<IRegisterOrderCommand>(new
             {
-                CorrelationId = Guid.NewGuid(),
+                EventID = Guid.NewGuid(),
                 CustomerName = orderDTO.CustomerName,
                 CustomerPhone = orderDTO.CustomerPhone,
                 PizzaID = orderDTO.PizzaID
