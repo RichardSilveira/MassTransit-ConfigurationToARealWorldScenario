@@ -19,7 +19,7 @@ namespace PizzaApi.StateMachines
                                     context => context.Message.EventID)
                         .SelectId(context => context.Message.EventID.Value));
 
-            Event(() => OrderRegistered, cc => cc.CorrelateById(context => context.Message.EventID));
+            Event(() => OrderApproved, cc => cc.CorrelateById(context => context.Message.EventID.Value));
 
             Initially(
                 When(RegisterOrder)
@@ -32,6 +32,16 @@ namespace PizzaApi.StateMachines
                     .TransitionTo(Registered)
                     .Publish(context => new OrderRegisteredEvent(context.Instance))
                 );
+
+            During(Registered,
+                When(OrderApproved)
+                    .Then(context =>
+                    {
+                        context.Instance.EstimatedTime = context.Data.EstimatedTime;
+                        context.Instance.Status = context.Data.Status;
+                    })
+                    .Finalize()
+                );
         }
 
         public State Registered { get; private set; }
@@ -40,6 +50,6 @@ namespace PizzaApi.StateMachines
         public State Closed { get; private set; }
 
         public Event<IRegisterOrderCommand> RegisterOrder { get; private set; }
-        public Event<IOrderRegisteredEvent> OrderRegistered { get; private set; }
+        public Event<IOrderApprovedEvent> OrderApproved { get; private set; }
     }
 }

@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace PizzaApi.MessageContracts
 {
-    interface IOrderApprovedEvent
+    public interface IOrderApprovedEvent
     {
+        Guid? EventID { get; }
+
+        int? EstimatedTime { get; set; }
+
+        int Status { get; set; }
     }
 }
 //public int OrderID { get; set; }
