@@ -12,6 +12,14 @@ namespace PizzaDesktopApp.Attendant
     {
         static void Main(string[] args)
         {
+            BusConfigurationForAttendanteApp.Configure();
+        }
+    }
+
+    public static class BusConfigurationForAttendanteApp
+    {
+        public static void Configure()
+        {
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.RegisterOrderServiceQueue, e =>

@@ -25,6 +25,7 @@ namespace PizzaApi.StateMachines
                 When(RegisterOrder)
                     .Then(context =>
                     {
+                        context.Instance.OrderID = context.Data.OrderID;
                         context.Instance.CustomerName = context.Data.CustomerName;
                         context.Instance.CustomerPhone = context.Data.CustomerPhone;
                         context.Instance.PizzaID = context.Data.PizzaID;

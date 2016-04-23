@@ -10,6 +10,7 @@ namespace PizzaApi.MessageContracts
     {
         Guid EventID { get; }
 
+        int OrderID { get; }
         string CustomerName { get; }
         string CustomerPhone { get; }
         int PizzaID { get; }
