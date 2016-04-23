@@ -15,11 +15,13 @@ namespace PizzaApi.StateMachines
             InstanceState(x => x.CurrentState);
 
             Event(() => RegisterOrder,
-                cc => cc.CorrelateBy(order => order.CorrelationId,
-                                    context => context.Message.EventID)
-                        .SelectId(context => context.Message.EventID.Value));
+                cc => cc.CorrelateBy(order => order.OrderID,
+                                    context => context.Message.OrderID)
+                        .SelectId(context => Guid.NewGuid()));
 
-            Event(() => OrderApproved, cc => cc.CorrelateById(context => context.Message.EventID.Value));
+            Event(() => ApproveOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
+
+            //Event(() => OrderApproved, cc => cc.CorrelateById(context => context.Message.EventID.Value));//Should be published only?
 
             Initially(
                 When(RegisterOrder)
@@ -35,12 +37,14 @@ namespace PizzaApi.StateMachines
                 );
 
             During(Registered,
-                When(OrderApproved)
+                When(ApproveOrder)
                     .Then(context =>
                     {
+                        context.Instance.OrderID = context.Data.OrderID;
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
                     })
+                    .ThenAsync(async context => await Console.Out.WriteLineAsync("Send notification to client about your order approved"))
                     .Finalize()
                 );
         }
@@ -51,6 +55,7 @@ namespace PizzaApi.StateMachines
         public State Closed { get; private set; }
 
         public Event<IRegisterOrderCommand> RegisterOrder { get; private set; }
-        public Event<IOrderApprovedEvent> OrderApproved { get; private set; }
+        public Event<IApproveOrderCommand> ApproveOrder { get; private set; }
+        //public Event<IOrderApprovedEvent> OrderApproved { get; private set; }
     }
 }

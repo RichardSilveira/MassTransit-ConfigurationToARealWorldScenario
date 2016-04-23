@@ -14,6 +14,7 @@ using System.Net;
 using PizzaApi.DAL;
 using System.Data.Entity;
 using PizzaApi.MessageContracts;
+using MassTransit;
 
 namespace PizzaApi.Application
 {
@@ -23,12 +24,18 @@ namespace PizzaApi.Application
         private DbSet<Order> _dbSet;
         private string _baseUri;
 
+        private IBusControl _bus;
+        private Uri _sendToUri;
+
         public OrderController()
         {
             _context = new OrderContext();
             _dbSet = _context.Set<Order>();
 
             _baseUri = ConfigurationManager.AppSettings["Root"] + @"/api/order/";
+
+            _bus = BusConfigurator.ConfigureBus();
+            _sendToUri = new Uri(RabbitMqConstants.RabbitMqUri + RabbitMqConstants.SagaQueue);
         }
 
         /// <summary>
@@ -93,9 +100,8 @@ namespace PizzaApi.Application
             orderDTO = (OrderDTO)new OrderDTO().InjectFrom(order);
             orderDTO.StatusDescription = ((OrderStatus)order.Status).ToString();
 
-            var bus = BusConfigurator.ConfigureBus();
-            var sendToUri = new Uri(RabbitMqConstants.RabbitMqUri + RabbitMqConstants.SagaQueue);
-            var endPoint = await bus.GetSendEndpoint(sendToUri);
+
+            var endPoint = await _bus.GetSendEndpoint(_sendToUri);
 
             await endPoint.Send<IRegisterOrderCommand>(new
             {
@@ -134,6 +140,14 @@ namespace PizzaApi.Application
 
             var orderDTO = (OrderDTO)new OrderDTO().InjectFrom(order);
             orderDTO.StatusDescription = ((OrderStatus)order.Status).ToString();
+
+            var endPoint = await _bus.GetSendEndpoint(_sendToUri);
+            await endPoint.Send<IApproveOrderCommand>(new
+            {
+                OrderID = order.OrderID,
+                EstimatedTime = order.EstimatedTime.Value,
+                Status = order.Status
+            });
 
             return Ok(orderDTO);
         }
