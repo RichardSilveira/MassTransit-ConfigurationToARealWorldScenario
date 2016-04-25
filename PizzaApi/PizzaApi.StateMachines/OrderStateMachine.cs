@@ -31,7 +31,6 @@ namespace PizzaApi.StateMachines
                         context.Instance.CustomerName = context.Data.CustomerName;
                         context.Instance.CustomerPhone = context.Data.CustomerPhone;
                         context.Instance.PizzaID = context.Data.PizzaID;
-                        context.Instance.CorrelationId = context.Data.CorrelationId;
                     })
                     .TransitionTo(Registered)
                     .Publish(context => new OrderRegisteredEvent(context.Instance))
@@ -44,17 +43,18 @@ namespace PizzaApi.StateMachines
                         context.Instance.OrderID = context.Data.OrderID;
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
-                        context.Instance.CorrelationId = context.Data.CorrelationId;
                     })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync("Send notification to client about your order approved"))
                     .Finalize()
                 );
+
+            SetCompletedWhenFinalized();
         }
 
         public State Registered { get; private set; }
         public State Approved { get; private set; }
-        public State Rejected { get; private set; }
-        public State Closed { get; private set; }
+        //public State Rejected { get; private set; }
+        //public State Closed { get; private set; }
 
         public Event<IRegisterOrderCommand> RegisterOrder { get; private set; }
         public Event<IApproveOrderCommand> ApproveOrder { get; private set; }

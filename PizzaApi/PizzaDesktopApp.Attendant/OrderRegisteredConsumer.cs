@@ -38,7 +38,7 @@ namespace PizzaDesktopApp.Attendant
                     break;
             }
 
-            BusConfigurationForAttendanteApp.Configure();
+            //BusConfigurationForAttendanteApp.Configure();
         }
     }
 }

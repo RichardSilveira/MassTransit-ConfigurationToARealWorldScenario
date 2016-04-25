@@ -77,7 +77,8 @@ namespace PizzaApi.Application
             if (order == null)
                 return NotFound();
 
-            var orderDTO = new OrderDTO().InjectFrom(order);
+            var orderDTO = (OrderDTO)new OrderDTO().InjectFrom(order);
+            orderDTO.StatusDescription = ((OrderStatus)order.Status).ToString();
 
             return Ok(orderDTO);
         }
