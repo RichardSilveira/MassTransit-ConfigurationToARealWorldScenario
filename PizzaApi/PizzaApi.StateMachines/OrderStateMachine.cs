@@ -17,7 +17,7 @@ namespace PizzaApi.StateMachines
             Event(() => RegisterOrder,
                 cc => cc.CorrelateBy(order => order.OrderID,
                                     context => context.Message.OrderID)
-                        .SelectId(context => Guid.NewGuid()));
+                        .SelectId(context => context.Message.CorrelationId));
 
             Event(() => ApproveOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
 
@@ -31,6 +31,7 @@ namespace PizzaApi.StateMachines
                         context.Instance.CustomerName = context.Data.CustomerName;
                         context.Instance.CustomerPhone = context.Data.CustomerPhone;
                         context.Instance.PizzaID = context.Data.PizzaID;
+                        context.Instance.CorrelationId = context.Data.CorrelationId;
                     })
                     .TransitionTo(Registered)
                     .Publish(context => new OrderRegisteredEvent(context.Instance))
@@ -43,6 +44,7 @@ namespace PizzaApi.StateMachines
                         context.Instance.OrderID = context.Data.OrderID;
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
+                        context.Instance.CorrelationId = context.Data.CorrelationId;
                     })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync("Send notification to client about your order approved"))
                     .Finalize()

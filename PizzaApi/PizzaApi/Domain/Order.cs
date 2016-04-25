@@ -24,7 +24,10 @@ namespace PizzaApi.Domain
         [Required]
         public int PizzaID { get; protected set; }
 
-        public Order(string customerName, string customerPhone, int pizzaID)
+        [Required]
+        public Guid CorrelationId { get; set; }
+
+        public Order(string customerName, string customerPhone, int pizzaID, Guid correlationId)
         {
             if (string.IsNullOrEmpty(customerName))
                 throw new ArgumentNullException("customerName");
@@ -35,6 +38,8 @@ namespace PizzaApi.Domain
             CustomerName = customerName;
             CustomerPhone = customerPhone;
             PizzaID = pizzaID;
+
+            CorrelationId = correlationId;
 
             Status = (int)OrderStatus.WaitingAttendance;
         }

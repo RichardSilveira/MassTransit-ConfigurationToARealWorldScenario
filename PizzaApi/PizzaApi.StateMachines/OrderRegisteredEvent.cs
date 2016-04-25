@@ -12,15 +12,15 @@ namespace PizzaApi.StateMachines
         private readonly Order _orderInstance;
 
 
-        private Guid _eventID;
+        private Guid _correlationId;
         private int _orderID;
         private string _customerName;
         private string _customerPhone;
         private int _pizzaID;
 
-        public Guid EventID
+        public Guid CorrelationId
         {
-            get { return _eventID; }
+            get { return _correlationId; }
         }
 
         public int OrderID
@@ -47,7 +47,7 @@ namespace PizzaApi.StateMachines
         {
             _orderInstance = orderInstance;
 
-            _eventID = _orderInstance.CorrelationId;
+            _correlationId = _orderInstance.CorrelationId;
             _orderID = orderInstance.OrderID.Value;
             _customerName = _orderInstance.CustomerName;
             _customerPhone = _orderInstance.CustomerPhone;

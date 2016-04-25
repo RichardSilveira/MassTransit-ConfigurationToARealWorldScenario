@@ -10,9 +10,9 @@ namespace PizzaApi.MessageContracts
     {
         Guid CorrelationId { get; }
 
-        int OrderID { get;  }
-        int? EstimatedTime { get;  }
+        int OrderID { get; }
+        int? EstimatedTime { get; }
 
-        int Status { get;  }
+        int Status { get; }
     }
 }

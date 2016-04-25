@@ -92,7 +92,7 @@ namespace PizzaApi.Application
         [HttpPost]
         public async Task<IHttpActionResult> RegiterNew(OrderDTO orderDTO)
         {
-            var order = new Order(orderDTO.CustomerName, orderDTO.CustomerPhone, orderDTO.PizzaID);
+            var order = new Order(orderDTO.CustomerName, orderDTO.CustomerPhone, orderDTO.PizzaID, Guid.NewGuid());
 
             _dbSet.Add(order);
             await _context.SaveChangesAsync();
@@ -105,11 +105,11 @@ namespace PizzaApi.Application
 
             await endPoint.Send<IRegisterOrderCommand>(new
             {
-                EventID = Guid.NewGuid(),
                 OrderID = order.OrderID,
                 CustomerName = orderDTO.CustomerName,
                 CustomerPhone = orderDTO.CustomerPhone,
-                PizzaID = orderDTO.PizzaID
+                PizzaID = orderDTO.PizzaID,
+                CorrelationId = order.CorrelationId
             });
 
             return Created(new Uri(_baseUri + orderDTO.OrderID), orderDTO);
@@ -146,7 +146,8 @@ namespace PizzaApi.Application
             {
                 OrderID = order.OrderID,
                 EstimatedTime = order.EstimatedTime.Value,
-                Status = order.Status
+                Status = order.Status,
+                CorrelationId = order.CorrelationId
             });
 
             return Ok(orderDTO);
