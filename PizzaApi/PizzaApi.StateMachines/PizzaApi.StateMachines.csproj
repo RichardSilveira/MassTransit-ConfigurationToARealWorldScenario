@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Order.cs" />
+    <Compile Include="OrderApprovedEvent.cs" />
     <Compile Include="OrderRegisteredEvent.cs" />
     <Compile Include="OrderStateMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

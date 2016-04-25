@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace PizzaApi.MessageContracts
 {
-    public interface IApproveOrderCommand
+    public interface ICloseOrderCommand
     {
         Guid CorrelationId { get; }
 
         int OrderID { get; }
-        int? EstimatedTime { get; }
         int Status { get; }
     }
 }

@@ -26,15 +26,19 @@ namespace PizzaDesktopApp.Attendant
             }
         }
 
-        public static void RejectOrder()
+        public static async Task<HttpResponseMessage> RejectOrder(dynamic orderData)
         {
+            using (var client = new HttpClient())
+            {
+                string uri = "api//order//" + orderData.OrderID + "//reject";
+                client.BaseAddress = new Uri("http://localhost:1234");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                HttpContent content = new StringContent(orderData.ReasonPhrase, Encoding.UTF8, "application/json");
+
+                return await client.PostAsync(uri, content);
+            }
         }
     }
 }
-//    Guid EventID { get; }
-
-//int OrderID { get; }
-//string CustomerName { get; }
-//string CustomerPhone { get; }
-//int PizzaID { get; }

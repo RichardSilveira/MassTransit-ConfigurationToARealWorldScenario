@@ -48,7 +48,7 @@ namespace PizzaApi.StateMachines
             _orderInstance = orderInstance;
 
             _correlationId = _orderInstance.CorrelationId;
-            _orderID = orderInstance.OrderID.Value;
+            _orderID = _orderInstance.OrderID.Value;
             _customerName = _orderInstance.CustomerName;
             _customerPhone = _orderInstance.CustomerPhone;
             _pizzaID = _orderInstance.PizzaID;

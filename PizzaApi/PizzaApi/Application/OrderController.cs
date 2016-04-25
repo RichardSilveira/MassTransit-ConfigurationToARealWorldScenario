@@ -177,7 +177,18 @@ namespace PizzaApi.Application
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
+            var endPoint = await _bus.GetSendEndpoint(_sendToUri);
+
+            await endPoint.Send<IRejectOrderCommand>(new
+            {
+                OrderID = order.OrderID,
+                RejectedReasonPhrase = order.RejectedReasonPhrase,
+                CorrelationId = order.CorrelationId
+            });
+
             return StatusCode(HttpStatusCode.NoContent);
         }
+
+        //TODO:Create Close order method
     }
 }

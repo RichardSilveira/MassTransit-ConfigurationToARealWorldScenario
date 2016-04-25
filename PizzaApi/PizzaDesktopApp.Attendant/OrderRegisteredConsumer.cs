@@ -31,6 +31,13 @@ namespace PizzaDesktopApp.Attendant
 
                     break;
                 case "N":
+                    Console.Write("Why do you want do reject this order? :");
+                    var reasonPhrase = Console.ReadLine();
+
+                    var responseToReject = await AttendantApplicationActions.RejectOrder(new { OrderID = context.Message.OrderID, ReasonPhrase = reasonPhrase });
+
+                    var responseToRejectContent = await responseToReject.Content.ReadAsStringAsync();
+                    Console.WriteLine(string.Format("PizzaApi server status code {0}. \n Content: {1}", responseToReject.StatusCode, responseToRejectContent));
 
                     break;
                 default:

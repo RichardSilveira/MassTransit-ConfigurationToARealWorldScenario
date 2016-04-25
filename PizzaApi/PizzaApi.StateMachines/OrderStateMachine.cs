@@ -20,14 +20,13 @@ namespace PizzaApi.StateMachines
                         .SelectId(context => context.Message.CorrelationId));
 
             Event(() => ApproveOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
-
-            //Event(() => OrderApproved, cc => cc.CorrelateById(context => context.Message.EventID.Value));//Should be published only?
+            Event(() => RejectOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
 
             Initially(
                 When(RegisterOrder)
                     .Then(context =>
                     {
-                        context.Instance.OrderID = context.Data.OrderID;
+                        context.Instance.OrderID = context.Data.OrderID;//Check if already is fullfield...
                         context.Instance.CustomerName = context.Data.CustomerName;
                         context.Instance.CustomerPhone = context.Data.CustomerPhone;
                         context.Instance.PizzaID = context.Data.PizzaID;
@@ -40,11 +39,20 @@ namespace PizzaApi.StateMachines
                 When(ApproveOrder)
                     .Then(context =>
                     {
-                        context.Instance.OrderID = context.Data.OrderID;
+                        context.Instance.OrderID = context.Data.OrderID;//Check if already is fullfield...
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
                     })
-                    .ThenAsync(async context => await Console.Out.WriteLineAsync("Send notification to client about your order approved"))
+                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order approved.",
+                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone)))
+                    .TransitionTo(Approved),
+                //.Publish(context => new OrderApprovedEvent(context.Instance))//In this scenario, i don´t need of this event...
+                When(RejectOrder)
+                    .Then(context =>
+                    {
+                        context.Instance.OrderID = context.Data.OrderID;//Check if already is fullfield...
+                        context.Instance.RejectedReasonPhrase = context.Data.RejectedReasonPhrase;
+                    })
                     .Finalize()
                 );
 
@@ -53,11 +61,12 @@ namespace PizzaApi.StateMachines
 
         public State Registered { get; private set; }
         public State Approved { get; private set; }
-        //public State Rejected { get; private set; }
-        //public State Closed { get; private set; }
+        public State Closed { get; private set; }
 
         public Event<IRegisterOrderCommand> RegisterOrder { get; private set; }
         public Event<IApproveOrderCommand> ApproveOrder { get; private set; }
-        //public Event<IOrderApprovedEvent> OrderApproved { get; private set; }
+        public Event<ICloseOrderCommand> CloseOrder { get; private set; }
+        public Event<IRejectOrderCommand> RejectOrder { get; private set; }
+
     }
 }

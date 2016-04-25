@@ -62,10 +62,10 @@
     <Compile Include="BusConfigurator.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="IApproveOrderCommand.cs" />
+    <Compile Include="ICloseOrderCommand.cs" />
     <Compile Include="IOrderApprovedEvent.cs" />
     <Compile Include="IOrderRegisteredEvent.cs" />
     <Compile Include="IRegisterOrderCommand.cs" />
-    <Compile Include="IRejectedOrderEvent.cs" />
     <Compile Include="IRejectOrderCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RabbitMqConstants.cs" />
