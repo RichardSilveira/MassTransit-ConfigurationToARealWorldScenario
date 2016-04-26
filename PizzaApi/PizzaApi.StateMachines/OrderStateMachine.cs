@@ -26,7 +26,7 @@ namespace PizzaApi.StateMachines
                 When(RegisterOrder)
                     .Then(context =>
                     {
-                        context.Instance.OrderID = context.Data.OrderID;//Check if already is fullfield...
+                        context.Instance.OrderID = context.Data.OrderID;
                         context.Instance.CustomerName = context.Data.CustomerName;
                         context.Instance.CustomerPhone = context.Data.CustomerPhone;
                         context.Instance.PizzaID = context.Data.PizzaID;
@@ -39,7 +39,6 @@ namespace PizzaApi.StateMachines
                 When(ApproveOrder)
                     .Then(context =>
                     {
-                        context.Instance.OrderID = context.Data.OrderID;//Check if already is fullfield...
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
                     })
@@ -50,7 +49,6 @@ namespace PizzaApi.StateMachines
                 When(RejectOrder)
                     .Then(context =>
                     {
-                        context.Instance.OrderID = context.Data.OrderID;//Check if already is fullfield...
                         context.Instance.RejectedReasonPhrase = context.Data.RejectedReasonPhrase;
                     })
                     .Finalize()
@@ -65,7 +63,7 @@ namespace PizzaApi.StateMachines
 
         public Event<IRegisterOrderCommand> RegisterOrder { get; private set; }
         public Event<IApproveOrderCommand> ApproveOrder { get; private set; }
-        public Event<ICloseOrderCommand> CloseOrder { get; private set; }
+        //public Event<ICloseOrderCommand> CloseOrder { get; private set; }
         public Event<IRejectOrderCommand> RejectOrder { get; private set; }
 
     }

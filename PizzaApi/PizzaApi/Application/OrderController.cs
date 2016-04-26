@@ -166,6 +166,9 @@ namespace PizzaApi.Application
         [Route("~/api/order/{id:int}/reject")]
         public async Task<IHttpActionResult> Reject(int id, [FromBody] string reasonPhrase)
         {
+            if (string.IsNullOrEmpty(reasonPhrase))
+                return BadRequest("A reason phrase should be informed.");
+
             var order = await _dbSet.Where(p => p.OrderID == id).SingleOrDefaultAsync();
 
             if (order == null)
