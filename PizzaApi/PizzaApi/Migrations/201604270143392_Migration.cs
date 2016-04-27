@@ -12,12 +12,13 @@ namespace PizzaApi.Migrations
                 c => new
                     {
                         OrderID = c.Int(nullable: false, identity: true),
-                        CustomerName = c.String(nullable: false, maxLength: 4000),
-                        CustomerPhone = c.String(nullable: false, maxLength: 4000),
+                        CustomerName = c.String(nullable: false),
+                        CustomerPhone = c.String(nullable: false),
                         EstimatedTime = c.Int(),
                         Status = c.Int(nullable: false),
-                        RejectedReasonPhrase = c.String(maxLength: 4000),
+                        RejectedReasonPhrase = c.String(),
                         PizzaID = c.Int(nullable: false),
+                        CorrelationId = c.Guid(nullable: false),
                     })
                 .PrimaryKey(t => t.OrderID);
             
@@ -26,8 +27,8 @@ namespace PizzaApi.Migrations
                 c => new
                     {
                         PizzaID = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 4000),
-                        Ingredients = c.String(nullable: false, maxLength: 4000),
+                        Name = c.String(nullable: false),
+                        Ingredients = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.PizzaID);
             

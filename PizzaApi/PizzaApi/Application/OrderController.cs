@@ -155,6 +155,40 @@ namespace PizzaApi.Application
         }
 
         /// <summary>
+        /// Close an order
+        /// </summary>
+        /// <param name="id">Order identifier</param>
+        [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        [SwaggerResponse(HttpStatusCode.NoContent)]
+        [HttpPost]
+        [Route("~/api/order/{id:int}/close")]
+        public async Task<IHttpActionResult> Close(int id)
+        {
+            var order = await _dbSet.Where(p => p.OrderID == id).SingleOrDefaultAsync();
+
+            if (order == null)
+                return NotFound();
+
+            order.Close();
+
+            _dbSet.Attach(order);
+            _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            var endPoint = await _bus.GetSendEndpoint(_sendToUri);
+
+            await endPoint.Send<ICloseOrderCommand>(new
+            {
+                OrderID = order.OrderID,
+                Status = order.Status,
+                CorrelationId = order.CorrelationId
+            });
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        /// <summary>
         /// Reject an order
         /// </summary>
         /// <param name="id">Order identifier</param>
@@ -191,7 +225,5 @@ namespace PizzaApi.Application
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
-        //TODO:Create Close order method
     }
 }

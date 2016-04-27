@@ -129,13 +129,9 @@
     <Compile Include="Domain\Order.cs" />
     <Compile Include="Domain\OrderStatus.cs" />
     <Compile Include="Domain\Pizza.cs" />
-    <Compile Include="Migrations\201604211420151_Migration.cs" />
-    <Compile Include="Migrations\201604211420151_Migration.Designer.cs">
-      <DependentUpon>201604211420151_Migration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604251348195_Migration1.cs" />
-    <Compile Include="Migrations\201604251348195_Migration1.Designer.cs">
-      <DependentUpon>201604251348195_Migration1.cs</DependentUpon>
+    <Compile Include="Migrations\201604270143392_Migration.cs" />
+    <Compile Include="Migrations\201604270143392_Migration.Designer.cs">
+      <DependentUpon>201604270143392_Migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
@@ -160,11 +156,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201604211420151_Migration.resx">
-      <DependentUpon>201604211420151_Migration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604251348195_Migration1.resx">
-      <DependentUpon>201604251348195_Migration1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201604270143392_Migration.resx">
+      <DependentUpon>201604270143392_Migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

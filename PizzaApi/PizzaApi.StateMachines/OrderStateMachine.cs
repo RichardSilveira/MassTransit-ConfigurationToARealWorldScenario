@@ -20,6 +20,7 @@ namespace PizzaApi.StateMachines
                         .SelectId(context => context.Message.CorrelationId));
 
             Event(() => ApproveOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
+            Event(() => CloseOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
             Event(() => RejectOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
 
             Initially(
@@ -42,7 +43,7 @@ namespace PizzaApi.StateMachines
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
                     })
-                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order approved.",
+                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
                     .TransitionTo(Approved),
                 //.Publish(context => new OrderApprovedEvent(context.Instance))//In this scenario, i don´t need of this event...
@@ -51,6 +52,16 @@ namespace PizzaApi.StateMachines
                     {
                         context.Instance.RejectedReasonPhrase = context.Data.RejectedReasonPhrase;
                     })
+                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer {1} about your order status 'REJECTED', reason: {2}.",
+                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone, context.Instance.RejectedReasonPhrase)))
+                    .Finalize()
+                );
+
+            During(Approved,
+                When(CloseOrder)
+                    .Then(context => context.Instance.Status = context.Data.Status)
+                    .ThenAsync(async context => await Console.Out.WriteAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
+                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone)))
                     .Finalize()
                 );
 
@@ -59,12 +70,10 @@ namespace PizzaApi.StateMachines
 
         public State Registered { get; private set; }
         public State Approved { get; private set; }
-        public State Closed { get; private set; }
 
         public Event<IRegisterOrderCommand> RegisterOrder { get; private set; }
         public Event<IApproveOrderCommand> ApproveOrder { get; private set; }
-        //public Event<ICloseOrderCommand> CloseOrder { get; private set; }
+        public Event<ICloseOrderCommand> CloseOrder { get; private set; }
         public Event<IRejectOrderCommand> RejectOrder { get; private set; }
-
     }
 }

@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusConfigurator.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="IApproveOrderCommand.cs" />
     <Compile Include="ICloseOrderCommand.cs" />
     <Compile Include="IOrderApprovedEvent.cs" />

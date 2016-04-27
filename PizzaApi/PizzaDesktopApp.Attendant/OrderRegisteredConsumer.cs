@@ -12,37 +12,47 @@ namespace PizzaDesktopApp.Attendant
     {
         public async Task Consume(ConsumeContext<IOrderRegisteredEvent> context)
         {
-            Console.Write(string.Format("The customer {0} made an order (ID: {1}) for pizza ID {2}. Did you want to approve this order? Answer bellow - Y/N",
-                                                context.Message.CustomerName, context.Message.OrderID, context.Message.PizzaID));
-            var attendantChoice = Console.ReadLine();
-
-            switch (attendantChoice.ToUpper())
+            try
             {
-                case "Y":
-                    Console.Write("What is the estimated time for this order (in minutes)? :");
-                    var estimatedTime = Console.ReadLine();
+                Console.Write(string.Format("The customer {0} made an order (ID: {1}) for pizza ID {2}. Did you want to approve this order? Answer bellow - Y/N",
+                                                        context.Message.CustomerName, context.Message.OrderID, context.Message.PizzaID));
+                var attendantChoice = Console.ReadLine();
 
-                    var response = await AttendantApplicationActions.ApproveOrder(new { OrderID = context.Message.OrderID, EstimatedTime = estimatedTime });
+                switch (attendantChoice.ToUpper())
+                {
+                    case "Y":
+                        Console.Write("What is the estimated time for this order (in minutes)? :");
+                        var estimatedTime = Console.ReadLine();
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(string.Format("PizzaApi server status code {0}. \n Content: {1}", response.StatusCode, responseContent));
-                    
-                    break;
-                case "N":
-                    Console.Write("Why do you want do reject this order? :");
-                    string reasonPhrase = "\"" + Console.ReadLine() + "\"";
+                        var response = await AttendantApplicationActions.ApproveOrder(new { OrderID = context.Message.OrderID, EstimatedTime = estimatedTime });
 
-                    var responseToReject = await AttendantApplicationActions.RejectOrder(new { OrderID = context.Message.OrderID, ReasonPhrase = reasonPhrase });
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(string.Format("PizzaApi server status code {0}. \n Content: {1}", response.StatusCode, responseContent));
 
-                    var responseToRejectContent = await responseToReject.Content.ReadAsStringAsync();
-                    Console.WriteLine(string.Format("PizzaApi server status code {0}. \n Content: {1}", responseToReject.StatusCode, responseToRejectContent));
+                        break;
+                    case "N":
+                        Console.Write("Why do you want do reject this order? :");
+                        string reasonPhrase = "\"" + Console.ReadLine() + "\"";
 
-                    break;
-                default:
-                    Console.WriteLine("Your awnser is invalid!");
-                    break;
+                        var responseToReject = await AttendantApplicationActions.RejectOrder(new { OrderID = context.Message.OrderID, ReasonPhrase = reasonPhrase });
+
+                        var responseToRejectContent = await responseToReject.Content.ReadAsStringAsync();
+                        Console.WriteLine(string.Format("PizzaApi server status code {0}. \n Content: {1}", responseToReject.StatusCode, responseToRejectContent));
+
+                        break;
+                    default:
+                        Console.WriteLine("Your awnser is invalid!");
+                        break;
+                }
             }
-            Console.ReadLine();
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+            finally
+            {
+                Console.ReadLine();
+            }
             //BusConfigurationForAttendanteApp.Configure();
         }
     }

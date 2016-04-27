@@ -17,7 +17,7 @@ namespace PizzaApi.DAL
         public OrderContext()
             : base("OrderContext")
         {
-            //Database.SetInitializer(new CreateDatabaseIfNotExists<OrderContext>());
+            Database.SetInitializer(new CreateDatabaseIfNotExists<OrderContext>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
