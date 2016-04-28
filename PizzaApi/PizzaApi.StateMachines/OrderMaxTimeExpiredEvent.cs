@@ -7,56 +7,48 @@ using System.Threading.Tasks;
 
 namespace PizzaApi.StateMachines
 {
-    public class OrderApprovedEvent : IOrderApprovedEvent
+    public class OrderMaxTimeExpiredEvent : IOrderMaxTimeExpiredEvent
     {
         private readonly Order _orderInstance;
-        
+
         private Guid _correlationId;
         private int _orderID;
         private int? _estimatedTime;
-        private int _status;
+        private string _customerName;
+        private string _customerPhone;
 
         public Guid CorrelationId
         {
-            get
-            {
-                return _correlationId;
-            }
-        }
-
-        public int? EstimatedTime
-        {
-            get
-            {
-                return _estimatedTime;
-            }
+            get { return _correlationId; }
         }
 
         public int OrderID
         {
-            get
-            {
-                return _orderID;
-            }
+            get { return _orderID; }
         }
-
-        public int Status
+        public int? EstimatedTime
         {
-            get
-            {
-                return _status;
-            }
+            get { return _estimatedTime; }
         }
 
-        public OrderApprovedEvent(Order orderInstance)
+        public string CustomerName
+        {
+            get { return _customerName; }
+        }
+        public string CustomerPhone
+        {
+            get { return _customerPhone; }
+        }
+
+        public OrderMaxTimeExpiredEvent(Order orderInstance)
         {
             _orderInstance = orderInstance;
 
             _correlationId = _orderInstance.CorrelationId;
             _orderID = _orderInstance.OrderID.Value;
             _estimatedTime = _orderInstance.EstimatedTime;
-            _status = _orderInstance.Status;
-
+            _customerName = _orderInstance.CustomerName;
+            _customerPhone = _orderInstance.CustomerPhone;
         }
     }
 }

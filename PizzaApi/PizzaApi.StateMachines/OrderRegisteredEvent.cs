@@ -11,7 +11,6 @@ namespace PizzaApi.StateMachines
     {
         private readonly Order _orderInstance;
 
-
         private Guid _correlationId;
         private int _orderID;
         private string _customerName;

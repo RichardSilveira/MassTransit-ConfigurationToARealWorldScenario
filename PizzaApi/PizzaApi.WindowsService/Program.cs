@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Automatonymous;
+using MassTransit;
 
 namespace PizzaApi.WindowsService
 {
@@ -23,6 +24,7 @@ namespace PizzaApi.WindowsService
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
                     e.StateMachineSaga(saga, repo);
+                    e.UseMessageScheduler(new Uri("rabbitmq://localhost/quartz"));
                 });
             });
             bus.Start();

@@ -15,6 +15,8 @@ namespace PizzaApi.StateMachines
         //public DateTime ReceivedDateTime { get; set; }
         //public DateTime RegisteredDateTime { get; set; }
 
+        public Guid? ExpirationId { get; set; }
+
         public int? OrderID { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }

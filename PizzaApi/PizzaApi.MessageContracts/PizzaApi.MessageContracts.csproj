@@ -62,6 +62,7 @@
     <Compile Include="BusConfigurator.cs" />
     <Compile Include="IApproveOrderCommand.cs" />
     <Compile Include="ICloseOrderCommand.cs" />
+    <Compile Include="IOrderMaxTimeExpiredEvent.cs" />
     <Compile Include="IOrderApprovedEvent.cs" />
     <Compile Include="IOrderRegisteredEvent.cs" />
     <Compile Include="IRegisterOrderCommand.cs" />
