@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MassTransit;
+using MassTransit.QuartzIntegration;
+using Quartz;
+using Quartz.Impl;
 
 namespace PizzaDesktopApp.Attendant
 {
@@ -20,6 +23,8 @@ namespace PizzaDesktopApp.Attendant
     {
         public static void Configure()
         {
+            IScheduler _scheduler = CreateScheduler();
+
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.RegisterOrderServiceQueue, e =>
@@ -36,6 +41,24 @@ namespace PizzaDesktopApp.Attendant
 
                     e.Consumer<OrderRegisteredConsumer>();
                 });
+
+                //cfg.ReceiveEndpoint("quartz", e =>
+                //{
+                //    cfg.UseMessageScheduler(e.InputAddress);
+                //    //e.PrefetchCount = 1;
+
+                //    e.Consumer(() => new ScheduleMessageConsumer(_scheduler));
+                //    e.Consumer(() => new CancelScheduledMessageConsumer(_scheduler));
+                //});
+
+                //cfg.ReceiveEndpoint(host, "quartz", e =>
+                //{
+                //    cfg.UseMessageScheduler(e.InputAddress);
+                //    //e.PrefetchCount = 1;
+
+                //    e.Consumer(() => new ScheduleMessageConsumer(_scheduler));
+                //    e.Consumer(() => new CancelScheduledMessageConsumer(_scheduler));
+                //});
             });
 
             bus.Start();
@@ -44,6 +67,15 @@ namespace PizzaDesktopApp.Attendant
             Console.ReadLine();
 
             bus.Stop();
+        }
+
+        static IScheduler CreateScheduler()
+        {
+            ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
+
+            IScheduler scheduler = schedulerFactory.GetScheduler();
+
+            return scheduler;
         }
     }
 }

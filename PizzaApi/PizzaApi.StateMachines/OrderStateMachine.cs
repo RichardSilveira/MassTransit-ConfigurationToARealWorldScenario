@@ -42,7 +42,8 @@ namespace PizzaApi.StateMachines
                     .TransitionTo(Registered)
                     .Publish(context => new OrderRegisteredEvent(context.Instance))
                 );
-
+            //.ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
+            //                                                                                    context.Instance.CustomerName, context.Instance.CustomerPhone)))
             During(Registered,
                 When(ApproveOrder)
                     .Then(context =>
@@ -50,10 +51,8 @@ namespace PizzaApi.StateMachines
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
                     })
-                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
-                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone)))
-                    .Schedule(OrderMaxTimeExpired, context => new OrderMaxTimeExpiredEvent(context.Instance))
-                    .TransitionTo(Approved),
+                    .TransitionTo(Approved)
+                    .Schedule(OrderMaxTimeExpired, context => new OrderMaxTimeExpiredEvent(context.Instance)),
                 //.Publish(context => new OrderApprovedEvent(context.Instance))//In this scenario, i don´t need of this event...
                 When(RejectOrder)
                     .Then(context =>
@@ -73,7 +72,7 @@ namespace PizzaApi.StateMachines
                     .Then(context => context.Instance.Status = context.Data.Status)
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
-                    .Unschedule(OrderMaxTimeExpired)
+                    //.Unschedule(OrderMaxTimeExpired)
                     .Finalize()
                 );
 

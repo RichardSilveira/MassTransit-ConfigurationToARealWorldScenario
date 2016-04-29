@@ -19,6 +19,7 @@ namespace PizzaApi.MessageContracts
                     hst.Username(RabbitMqConstants.UserName);
                     hst.Password(RabbitMqConstants.Password);
                 });
+                //cfg.UseMessageScheduler(new Uri("rabbitmq://localhost/quartz"));
 
                 if (registrationAction != null)
                     registrationAction.Invoke(cfg, host);
