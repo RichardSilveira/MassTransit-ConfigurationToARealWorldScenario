@@ -24,7 +24,6 @@ namespace PizzaApi.WindowsService
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
                     e.StateMachineSaga(saga, repo);
-                    e.UseMessageScheduler(new Uri("rabbitmq://localhost/quartz"));
                 });
             });
             bus.Start();

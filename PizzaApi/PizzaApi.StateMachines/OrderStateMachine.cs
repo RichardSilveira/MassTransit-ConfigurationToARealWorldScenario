@@ -24,11 +24,6 @@ namespace PizzaApi.StateMachines
             Event(() => RejectOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
 
             //TODO:notify the attendant about an approved order that is taking too long to be completed
-            Schedule(() => OrderMaxTimeExpired, ce => ce.ExpirationId, sc =>
-            {
-                sc.Delay = TimeSpan.FromSeconds(10);//Simulated time (on real case this value will be one hour)
-                sc.Received = a => a.CorrelateById(context => context.Message.CorrelationId);
-            });
 
             Initially(
                 When(RegisterOrder)
@@ -52,7 +47,7 @@ namespace PizzaApi.StateMachines
                     })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
-                    .Schedule(OrderMaxTimeExpired, context => new OrderMaxTimeExpiredEvent(context.Instance))
+                //.Schedule(OrderMaxTimeExpired, context => new OrderMaxTimeExpiredEvent(context.Instance))
                     .TransitionTo(Approved),
                 //.Publish(context => new OrderApprovedEvent(context.Instance))//In this scenario, i don´t need of this event...
                 When(RejectOrder)
@@ -73,7 +68,6 @@ namespace PizzaApi.StateMachines
                     .Then(context => context.Instance.Status = context.Data.Status)
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
-                    .Unschedule(OrderMaxTimeExpired)
                     .Finalize()
                 );
 
