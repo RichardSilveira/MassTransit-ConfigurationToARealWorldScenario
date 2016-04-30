@@ -1,4 +1,5 @@
 ﻿using Automatonymous;
+using Hangfire;
 using PizzaApi.MessageContracts;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,8 @@ namespace PizzaApi.StateMachines
                     {
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
+
+                        BackgroundJob.Enqueue(() => Console.WriteLine("Fire-and-forget (Do something rigth now by an workder, outside this thread!)"));
                     })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
@@ -61,9 +64,9 @@ namespace PizzaApi.StateMachines
                 );
 
             During(Approved,
-                When(OrderMaxTimeExpired.Received)
-                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to attendant to inform about an order that is taking too long to get ready (orderID: {0}, estimated time: {1}, customerName: {2}.",
-                                                                                                context.Instance.OrderID, context.Instance.EstimatedTime, context.Instance.CustomerName))),
+                //When(OrderMaxTimeExpired.Received)
+                //    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to attendant to inform about an order that is taking too long to get ready (orderID: {0}, estimated time: {1}, customerName: {2}.",
+                //                                                                                context.Instance.OrderID, context.Instance.EstimatedTime, context.Instance.CustomerName))),
                 When(CloseOrder)
                     .Then(context => context.Instance.Status = context.Data.Status)
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
