@@ -24,8 +24,6 @@ namespace PizzaApi.StateMachines
             Event(() => CloseOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
             Event(() => RejectOrder, cc => cc.CorrelateById(context => context.Message.CorrelationId));
 
-            //TODO:notify the attendant about an approved order that is taking too long to be completed
-
             Initially(
                 When(RegisterOrder)
                     .Then(context =>
@@ -46,11 +44,13 @@ namespace PizzaApi.StateMachines
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
 
-                        BackgroundJob.Enqueue(() => Console.WriteLine("Fire-and-forget (Do something rigth now by an workder, outside this thread!)"));
+                        var delayedTimeInSeconds = context.Instance.EstimatedTime.Value * 60 * 0.65f;
+                        Console.WriteLine("delayedTime (in seconds): " + delayedTimeInSeconds);
+                        BackgroundJob.Schedule(() => Console.WriteLine("Send notification to client: Pay attention please. Your order is near to be done!"),
+                                                        TimeSpan.FromSeconds(delayedTimeInSeconds));
                     })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
-                //.Schedule(OrderMaxTimeExpired, context => new OrderMaxTimeExpiredEvent(context.Instance))
                     .TransitionTo(Approved),
                 //.Publish(context => new OrderApprovedEvent(context.Instance))//In this scenario, i don´t need of this event...
                 When(RejectOrder)
@@ -64,9 +64,6 @@ namespace PizzaApi.StateMachines
                 );
 
             During(Approved,
-                //When(OrderMaxTimeExpired.Received)
-                //    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to attendant to inform about an order that is taking too long to get ready (orderID: {0}, estimated time: {1}, customerName: {2}.",
-                //                                                                                context.Instance.OrderID, context.Instance.EstimatedTime, context.Instance.CustomerName))),
                 When(CloseOrder)
                     .Then(context => context.Instance.Status = context.Data.Status)
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
@@ -84,7 +81,6 @@ namespace PizzaApi.StateMachines
         public Event<IApproveOrderCommand> ApproveOrder { get; private set; }
         public Event<ICloseOrderCommand> CloseOrder { get; private set; }
         public Event<IRejectOrderCommand> RejectOrder { get; private set; }
-        public Schedule<Order, IOrderMaxTimeExpiredEvent> OrderMaxTimeExpired { get; set; }
 
     }
 }

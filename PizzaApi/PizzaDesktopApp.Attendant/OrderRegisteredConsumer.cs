@@ -51,6 +51,7 @@ namespace PizzaDesktopApp.Attendant
             }
             finally
             {
+                Console.WriteLine("Press enter to exit (and finalize the current queue consumer");
                 Console.ReadLine();
             }
             //BusConfigurationForAttendanteApp.Configure();

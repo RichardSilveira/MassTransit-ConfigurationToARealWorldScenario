@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Automatonymous;
 using MassTransit;
 using Hangfire;
+using Microsoft.Owin.Hosting;
 
 namespace PizzaApi.WindowsService
 {
@@ -36,10 +37,12 @@ namespace PizzaApi.WindowsService
                 Console.WriteLine("Saga active.. Press enter to exit");
 
                 GlobalConfiguration.Configuration
-                .UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfiresample;Integrated Security=True");
+                .UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True");
 
                 hangfireServer = new BackgroundJobServer();
                 Console.WriteLine("Hangfire Server started. Press any key to exit...");
+
+                WebApp.Start<Startup>("http://localhost:1235");
 
                 Console.ReadLine();
             }
