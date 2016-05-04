@@ -33,9 +33,11 @@ namespace PizzaApi.WindowsService
 
             var consumeObserver = new ConsoleLogConsumeObserver();
             var sendObserver = new ConsoleLogSendObserver();
+            var publishObserver = new ConsoleLogPublishObserver();
 
             bus.ConnectConsumeObserver(consumeObserver);
-            bus.ConnectSendObserver(sendObserver);
+            //bus.ConnectSendObserver(sendObserver);
+            bus.ConnectPublishObserver(publishObserver);
 
             try
             {
