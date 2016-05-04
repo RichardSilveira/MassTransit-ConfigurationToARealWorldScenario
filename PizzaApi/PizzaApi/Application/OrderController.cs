@@ -35,6 +35,9 @@ namespace PizzaApi.Application
             _baseUri = ConfigurationManager.AppSettings["Root"] + @"/api/order/";
 
             _bus = BusConfigurator.ConfigureBus();
+            var publishObserver = new ConsoleLogPublishObserver();
+            _bus.ConnectPublishObserver(publishObserver);
+
             _sendToUri = new Uri(RabbitMqConstants.RabbitMqUri + RabbitMqConstants.SagaQueue);
         }
 
@@ -179,6 +182,14 @@ namespace PizzaApi.Application
             var endPoint = await _bus.GetSendEndpoint(_sendToUri);
 
             await endPoint.Send<ICloseOrderCommand>(new
+            {
+                OrderID = order.OrderID,
+                Status = order.Status,
+                CorrelationId = order.CorrelationId
+            });
+            
+            //Just to show the ConsoleLogPublishObserver connected with this '_bus' instance.
+            await _bus.Publish<IClosedOrderEvent>(new
             {
                 OrderID = order.OrderID,
                 Status = order.Status,

@@ -26,6 +26,9 @@ namespace PizzaDesktopApp.Attendant
                 {
                     e.UseRateLimit(100, TimeSpan.FromSeconds(1));
 
+                    //e.UseRetry(Retry.Immediate(3));
+                    e.UseRetry(Retry.Except<ArgumentException>().Immediate(3));//default retries is 5
+
                     e.UseCircuitBreaker(cb =>
                     {
                         cb.TripThreshold = 15;
@@ -33,8 +36,6 @@ namespace PizzaDesktopApp.Attendant
                         cb.TrackingPeriod = TimeSpan.FromMinutes(1);
                         cb.ActiveThreshold = 10;
                     });
-
-                    //TODO: Configure Retry middleware
 
                     e.Consumer<OrderRegisteredConsumer>();
                     //x.UseLog(ConsoleOut, async context => "Consumer created");

@@ -41,6 +41,7 @@ namespace PizzaApi.StateMachines
                 When(ApproveOrder)
                     .Then(context =>
                     {
+                        throw new ArgumentException("Test for monitoring sagas");
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
 
@@ -49,8 +50,13 @@ namespace PizzaApi.StateMachines
                         BackgroundJob.Schedule(() => Console.WriteLine("Send notification to client: Pay attention please. Your order is near to be done!"),
                                                         TimeSpan.FromSeconds(delayedTimeInSeconds));
                     })
-                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
-                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone)))
+                    .ThenAsync(async context =>
+                    {
+                        //throw new ArgumentException("Test for monitoring sagas");
+                        
+                        await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
+                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone));
+                    })
                     .TransitionTo(Approved),
                 //.Publish(context => new OrderApprovedEvent(context.Instance))//In this scenario, i don´t need of this event...
                 When(RejectOrder)

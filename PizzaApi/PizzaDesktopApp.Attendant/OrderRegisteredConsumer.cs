@@ -26,6 +26,9 @@ namespace PizzaDesktopApp.Attendant
                         Console.Write("What is the estimated time for this order (in minutes)? :");
                         var estimatedTime = Console.ReadLine();
 
+                        //For tests (to verify 'UseRetry' and Circuit Breaker in action)
+                        //throw new ArgumentException("Test for monitoring consumer");
+
                         var response = await AttendantApplicationActions.ApproveOrder(new { OrderID = context.Message.OrderID, EstimatedTime = estimatedTime });
 
                         var responseContent = await response.Content.ReadAsStringAsync();
@@ -57,7 +60,6 @@ namespace PizzaDesktopApp.Attendant
                 Console.WriteLine("Press enter to exit (and finalize the current queue consumer");
                 Console.ReadLine();
             }
-            //BusConfigurationForAttendanteApp.Configure();
         }
     }
 }

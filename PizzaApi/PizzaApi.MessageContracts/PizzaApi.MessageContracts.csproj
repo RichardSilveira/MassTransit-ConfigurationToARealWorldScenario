@@ -64,6 +64,7 @@
     <Compile Include="ConsoleLogPublishObserver.cs" />
     <Compile Include="ConsoleLogSendObserver.cs" />
     <Compile Include="IApproveOrderCommand.cs" />
+    <Compile Include="IClosedOrderEvent.cs" />
     <Compile Include="ICloseOrderCommand.cs" />
     <Compile Include="IOrderMaxTimeExpiredEvent.cs" />
     <Compile Include="IOrderApprovedEvent.cs" />
