@@ -34,9 +34,15 @@ namespace PizzaDesktopApp.Attendant
                         cb.ActiveThreshold = 10;
                     });
 
+                    //TODO: Configure Retry middleware
+
                     e.Consumer<OrderRegisteredConsumer>();
+                    //x.UseLog(ConsoleOut, async context => "Consumer created");
                 });
             });
+
+            var consumeObserver = new ConsoleLogConsumeObserver();
+            bus.ConnectConsumeObserver(consumeObserver);
 
             bus.Start();
 
@@ -47,3 +53,4 @@ namespace PizzaDesktopApp.Attendant
         }
     }
 }
+//TODO: add middleware to the consumer pipeline

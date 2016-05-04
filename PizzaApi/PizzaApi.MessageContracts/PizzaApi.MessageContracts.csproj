@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusConfigurator.cs" />
+    <Compile Include="ConsoleLogConsumeObserver.cs" />
+    <Compile Include="ConsoleLogSendObserver.cs" />
     <Compile Include="IApproveOrderCommand.cs" />
     <Compile Include="ICloseOrderCommand.cs" />
     <Compile Include="IOrderMaxTimeExpiredEvent.cs" />

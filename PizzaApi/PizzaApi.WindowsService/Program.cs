@@ -31,6 +31,12 @@ namespace PizzaApi.WindowsService
                 });
             });
 
+            var consumeObserver = new ConsoleLogConsumeObserver();
+            var sendObserver = new ConsoleLogSendObserver();
+
+            bus.ConnectConsumeObserver(consumeObserver);
+            bus.ConnectSendObserver(sendObserver);
+
             try
             {
                 bus.Start();

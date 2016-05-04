@@ -14,6 +14,8 @@ namespace PizzaDesktopApp.Attendant
         {
             try
             {
+                //throw new Exception("Test for monitoring consume observer on fault method");
+
                 Console.Write(string.Format("The customer {0} made an order (ID: {1}) for pizza ID {2}. Did you want to approve this order? Answer bellow - Y/N",
                                                         context.Message.CustomerName, context.Message.OrderID, context.Message.PizzaID));
                 var attendantChoice = Console.ReadLine();
@@ -48,6 +50,7 @@ namespace PizzaDesktopApp.Attendant
             catch (Exception exc)
             {
                 Console.WriteLine(exc.Message);
+                throw exc;
             }
             finally
             {
