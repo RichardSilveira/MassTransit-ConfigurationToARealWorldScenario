@@ -25,19 +25,24 @@ namespace PizzaApi.WindowsService
 
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
+                cfg.UseRetry(Retry.Except(typeof(ArgumentException),
+                    typeof(NotAcceptedStateMachineException)).Immediate(10));
+
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
+                    e.UseRetry(Retry.Except(typeof(ArgumentException),
+                        typeof(NotAcceptedStateMachineException)).Immediate(10));
+
                     e.StateMachineSaga(saga, repo);
                 });
             });
 
             var consumeObserver = new ConsoleLogConsumeObserver();
-            var sendObserver = new ConsoleLogSendObserver();
-            var publishObserver = new ConsoleLogPublishObserver();
 
             bus.ConnectConsumeObserver(consumeObserver);
-            //bus.ConnectSendObserver(sendObserver);
-            bus.ConnectPublishObserver(publishObserver);
+
+            //TODO: See how to do versioning of messages (best practices)
+            //http://masstransit.readthedocs.io/en/master/overview/versioning.html
 
             try
             {
