@@ -41,7 +41,7 @@ namespace PizzaApi.StateMachines
                 When(ApproveOrder)
                     .Then(context =>
                     {
-                        throw new ArgumentException("Test for monitoring sagas");
+                        //throw new ArgumentException("Test for monitoring sagas");
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
 
