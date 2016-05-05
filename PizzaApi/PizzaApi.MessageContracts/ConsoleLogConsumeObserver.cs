@@ -20,16 +20,16 @@ namespace PizzaApi.MessageContracts
 
         public async Task PostConsume<T>(ConsumeContext<T> context) where T : class
         {
-            //var messageContext = JsonConvert.SerializeObject(context.Message);
+            var messageContext = JsonConvert.SerializeObject(context.Message);
 
-            //await Console.Out.WriteLineAsync("ConsumeObserver - PostConsume Observed with context: " + messageContext);
+            await Console.Out.WriteLineAsync("ConsumeObserver - PostConsume Observed with context: " + messageContext);
         }
 
         public async Task PreConsume<T>(ConsumeContext<T> context) where T : class
         {
-            //var messageContext = JsonConvert.SerializeObject(context.Message);
+            var messageContext = JsonConvert.SerializeObject(context.Message);
 
-            //await Console.Out.WriteLineAsync("ConsumeObserver - PreConsume Observed with context: " + messageContext);
+            await Console.Out.WriteLineAsync("ConsumeObserver - PreConsume Observed with context: " + messageContext);
         }
     }
 }

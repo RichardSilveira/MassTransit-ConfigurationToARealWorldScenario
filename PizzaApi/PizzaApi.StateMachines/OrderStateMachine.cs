@@ -53,7 +53,7 @@ namespace PizzaApi.StateMachines
                     .ThenAsync(async context =>
                     {
                         //throw new ArgumentException("Test for monitoring sagas");
-                        
+
                         await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone));
                     })
@@ -71,7 +71,11 @@ namespace PizzaApi.StateMachines
 
             During(Approved,
                 When(CloseOrder)
-                    .Then(context => context.Instance.Status = context.Data.Status)
+                    .Then(context =>
+                    {
+                        //throw new ArgumentException("Test for monitoring sagas");
+                        context.Instance.Status = context.Data.Status;
+                    })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
                     .Finalize()

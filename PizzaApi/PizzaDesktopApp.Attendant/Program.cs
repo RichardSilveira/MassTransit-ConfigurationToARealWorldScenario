@@ -26,8 +26,8 @@ namespace PizzaDesktopApp.Attendant
                 {
                     e.UseRateLimit(100, TimeSpan.FromSeconds(1));
 
-                    //e.UseRetry(Retry.Immediate(3));
-                    e.UseRetry(Retry.Except<ArgumentException>().Immediate(3));//default retries is 5
+                    //e.UseRetry(Retry.Immediate(3)); //For tests
+                    e.UseRetry(Retry.Except<ArgumentException>().Interval(10, TimeSpan.FromSeconds(5)));
 
                     e.UseCircuitBreaker(cb =>
                     {
