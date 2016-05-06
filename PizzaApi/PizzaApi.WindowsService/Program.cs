@@ -12,12 +12,13 @@ using Hangfire;
 using Microsoft.Owin.Hosting;
 using MassTransit.NLogIntegration;
 using MassTransit.Logging;
+using NLog;
 
 namespace PizzaApi.WindowsService
 {
     class Program
     {
-        //private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static NLog.Logger logger = LogManager.GetCurrentClassLogger();
 
         static void Main(string[] args)
         {
@@ -32,7 +33,7 @@ namespace PizzaApi.WindowsService
 
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
-                    cfg.UseNLog();
+                    cfg.UseNLog(new LogFactory());
 
                     cfg.EnablePerformanceCounters();
 

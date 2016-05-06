@@ -38,6 +38,7 @@ namespace PizzaDesktopApp.Attendant
 
                     e.Consumer<OrderRegisteredConsumer>();
                     //x.UseLog(ConsoleOut, async context => "Consumer created");
+
                 });
             });
 
