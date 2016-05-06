@@ -32,18 +32,18 @@ namespace PizzaApi.WindowsService
                 {
                     cfg.EnablePerformanceCounters();
 
-                    e.UseRetry(Retry.Interval(10, TimeSpan.FromSeconds(10)));
+                    //e.UseRetry(Retry.Interval(30, TimeSpan.FromSeconds(3)));
 
                     e.UseCircuitBreaker(cb =>
                     {
-                        cb.TripThreshold = 15;
+                        cb.TripThreshold = 20;
                         cb.ResetInterval(TimeSpan.FromMinutes(5));
                         cb.TrackingPeriod = TimeSpan.FromMinutes(1);
                         cb.ActiveThreshold = 10;
                     });
 
-                    e.UseRetry(Retry.Except(typeof(ArgumentException),
-                        typeof(NotAcceptedStateMachineException)).Interval(10, TimeSpan.FromSeconds(5)));
+                    //e.UseRetry(Retry.Except(typeof(ArgumentException),
+                    //    typeof(NotAcceptedStateMachineException)).Interval(10, TimeSpan.FromSeconds(5)));
 
                     e.StateMachineSaga(saga, repo);
                 });

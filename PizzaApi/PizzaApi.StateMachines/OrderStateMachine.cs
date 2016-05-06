@@ -28,6 +28,8 @@ namespace PizzaApi.StateMachines
                 When(RegisterOrder)
                     .Then(context =>
                     {
+                        throw new ArgumentException("Test for monitoring sagas");
+
                         context.Instance.OrderID = context.Data.OrderID;
                         context.Instance.CustomerName = context.Data.CustomerName;
                         context.Instance.CustomerPhone = context.Data.CustomerPhone;
@@ -41,7 +43,7 @@ namespace PizzaApi.StateMachines
                 When(ApproveOrder)
                     .Then(context =>
                     {
-                        //throw new ArgumentException("Test for monitoring sagas");
+                        throw new ArgumentException("Test for monitoring sagas");
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
 
