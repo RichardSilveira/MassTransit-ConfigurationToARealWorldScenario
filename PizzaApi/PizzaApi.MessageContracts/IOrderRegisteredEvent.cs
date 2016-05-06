@@ -9,6 +9,7 @@ namespace PizzaApi.MessageContracts
     public interface IOrderRegisteredEvent
     {
         Guid CorrelationId { get; }
+        DateTime Timestamp { get; }
 
         int OrderID { get; }
         string CustomerName { get; }

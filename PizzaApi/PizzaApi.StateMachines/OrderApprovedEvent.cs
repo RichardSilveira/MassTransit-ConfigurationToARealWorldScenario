@@ -12,6 +12,7 @@ namespace PizzaApi.StateMachines
         private readonly Order _orderInstance;
         
         private Guid _correlationId;
+        private DateTime _timeStamp;
         private int _orderID;
         private int? _estimatedTime;
         private int _status;
@@ -23,6 +24,8 @@ namespace PizzaApi.StateMachines
                 return _correlationId;
             }
         }
+
+        public DateTime Timestamp { get { return _timeStamp; } }
 
         public int? EstimatedTime
         {
@@ -53,6 +56,8 @@ namespace PizzaApi.StateMachines
             _orderInstance = orderInstance;
 
             _correlationId = _orderInstance.CorrelationId;
+            _timeStamp = _orderInstance.Updated;
+
             _orderID = _orderInstance.OrderID.Value;
             _estimatedTime = _orderInstance.EstimatedTime;
             _status = _orderInstance.Status;

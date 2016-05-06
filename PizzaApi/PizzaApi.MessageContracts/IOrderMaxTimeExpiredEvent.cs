@@ -9,6 +9,7 @@ namespace PizzaApi.MessageContracts
     public interface IOrderMaxTimeExpiredEvent
     {
         Guid CorrelationId { get; }
+        DateTime Timestamp { get; }
 
         int OrderID { get; }
         int? EstimatedTime { get; }

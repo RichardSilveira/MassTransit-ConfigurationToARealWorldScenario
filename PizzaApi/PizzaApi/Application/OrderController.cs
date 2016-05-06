@@ -113,7 +113,8 @@ namespace PizzaApi.Application
                 CustomerName = orderDTO.CustomerName,
                 CustomerPhone = orderDTO.CustomerPhone,
                 PizzaID = orderDTO.PizzaID,
-                CorrelationId = order.CorrelationId
+                CorrelationId = order.CorrelationId,
+                Timestamp = DateTime.UtcNow
             });
 
             return Created(new Uri(_baseUri + orderDTO.OrderID), orderDTO);
@@ -151,7 +152,8 @@ namespace PizzaApi.Application
                 OrderID = order.OrderID,
                 EstimatedTime = order.EstimatedTime.Value,
                 Status = order.Status,
-                CorrelationId = order.CorrelationId
+                CorrelationId = order.CorrelationId,
+                Timestamp = DateTime.UtcNow
             });
 
             return Ok(orderDTO);
@@ -185,7 +187,8 @@ namespace PizzaApi.Application
             {
                 OrderID = order.OrderID,
                 Status = order.Status,
-                CorrelationId = order.CorrelationId
+                CorrelationId = order.CorrelationId,
+                Timestamp = DateTime.UtcNow
             });
             
             //Just to show the ConsoleLogPublishObserver connected with this '_bus' instance.
@@ -193,7 +196,8 @@ namespace PizzaApi.Application
             {
                 OrderID = order.OrderID,
                 Status = order.Status,
-                CorrelationId = order.CorrelationId
+                CorrelationId = order.CorrelationId,
+                Timestamp = DateTime.UtcNow
             });
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -231,7 +235,8 @@ namespace PizzaApi.Application
             {
                 OrderID = order.OrderID,
                 RejectedReasonPhrase = order.RejectedReasonPhrase,
-                CorrelationId = order.CorrelationId
+                CorrelationId = order.CorrelationId,
+                Timestamp = DateTime.UtcNow
             });
 
             return StatusCode(HttpStatusCode.NoContent);

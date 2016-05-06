@@ -10,6 +10,7 @@ namespace PizzaApi.MessageContracts
     public interface IOrderApprovedEvent
     {
         Guid CorrelationId { get; }
+        DateTime Timestamp { get; }
 
         int OrderID { get; }
         int? EstimatedTime { get; }

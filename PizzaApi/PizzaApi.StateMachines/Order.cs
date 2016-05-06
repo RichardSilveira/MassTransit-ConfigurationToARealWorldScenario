@@ -12,9 +12,9 @@ namespace PizzaApi.StateMachines
         public Guid CorrelationId { get; set; }
         public State CurrentState { get; set; }
 
-        //public DateTime ReceivedDateTime { get; set; }
-        //public DateTime RegisteredDateTime { get; set; }
-        
+        public DateTime Created { get; set; }
+        public DateTime Updated { get; set; }
+
         public int? OrderID { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }

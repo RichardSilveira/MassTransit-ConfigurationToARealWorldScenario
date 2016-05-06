@@ -22,7 +22,6 @@ namespace PizzaApi.MessageContracts
         public async Task PostConsume<T>(ConsumeContext<T> context) where T : class
         {
             var messageContext = JsonConvert.SerializeObject(context.Message);
-
             
             await Console.Out.WriteLineAsync("ConsumeObserver - PostConsume Observed with context: " + messageContext);
         }
