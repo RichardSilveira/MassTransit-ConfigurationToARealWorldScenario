@@ -26,8 +26,7 @@ namespace PizzaDesktopApp.Attendant
                 {
                     e.UseRateLimit(100, TimeSpan.FromSeconds(1));
 
-                    //e.UseRetry(Retry.Immediate(3)); //For tests
-                    e.UseRetry(Retry.Except<ArgumentException>().Interval(10, TimeSpan.FromSeconds(5)));
+                    e.UseRetry(Retry.Interval(5, TimeSpan.FromSeconds(5)));
 
                     e.UseCircuitBreaker(cb =>
                     {
@@ -54,4 +53,3 @@ namespace PizzaDesktopApp.Attendant
         }
     }
 }
-//TODO: add middleware to the consumer pipeline

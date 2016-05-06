@@ -25,18 +25,16 @@ namespace PizzaApi.WindowsService
 
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
-                //cfg.UseRetry(Retry.Except(typeof(ArgumentException),
-                //    typeof(NotAcceptedStateMachineException)).Immediate(10));
-
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
                     cfg.EnablePerformanceCounters();
 
-                    //e.UseRetry(Retry.Interval(30, TimeSpan.FromSeconds(3)));
+                    e.UseRetry(Retry.Interval(5, TimeSpan.FromSeconds(5)));
+
 
                     e.UseCircuitBreaker(cb =>
                     {
-                        cb.TripThreshold = 20;
+                        cb.TripThreshold = 15;
                         cb.ResetInterval(TimeSpan.FromMinutes(5));
                         cb.TrackingPeriod = TimeSpan.FromMinutes(1);
                         cb.ActiveThreshold = 10;
@@ -44,6 +42,7 @@ namespace PizzaApi.WindowsService
 
                     //e.UseRetry(Retry.Except(typeof(ArgumentException),
                     //    typeof(NotAcceptedStateMachineException)).Interval(10, TimeSpan.FromSeconds(5)));
+                    //TODO: Create a custom filter policy for inner exceptions on Sagas: http://stackoverflow.com/questions/37041293/how-to-use-masstransits-retry-policy-with-sagas
 
                     e.StateMachineSaga(saga, repo);
                 });
