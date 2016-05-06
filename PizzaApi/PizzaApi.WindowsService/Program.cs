@@ -10,6 +10,7 @@ using Automatonymous;
 using MassTransit;
 using Hangfire;
 using Microsoft.Owin.Hosting;
+using MassTransit.NLogIntegration;
 
 namespace PizzaApi.WindowsService
 {
@@ -25,6 +26,7 @@ namespace PizzaApi.WindowsService
 
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
+                cfg.UseNLog();
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
                     cfg.EnablePerformanceCounters();
@@ -52,6 +54,7 @@ namespace PizzaApi.WindowsService
 
             bus.ConnectConsumeObserver(consumeObserver);
 
+            
             //TODO: See how to do versioning of messages (best practices)
             //http://masstransit.readthedocs.io/en/master/overview/versioning.html
 
