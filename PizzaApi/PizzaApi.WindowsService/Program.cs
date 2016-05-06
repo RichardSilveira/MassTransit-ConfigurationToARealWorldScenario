@@ -11,11 +11,14 @@ using MassTransit;
 using Hangfire;
 using Microsoft.Owin.Hosting;
 using MassTransit.NLogIntegration;
+using MassTransit.Logging;
 
 namespace PizzaApi.WindowsService
 {
     class Program
     {
+        //private static Logger logger = LogManager.GetCurrentClassLogger();
+
         static void Main(string[] args)
         {
             Console.Title = "Saga";
@@ -26,9 +29,11 @@ namespace PizzaApi.WindowsService
 
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
-                cfg.UseNLog();
+
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
+                    cfg.UseNLog();
+
                     cfg.EnablePerformanceCounters();
 
                     e.UseRetry(Retry.Interval(5, TimeSpan.FromSeconds(5)));
@@ -50,11 +55,12 @@ namespace PizzaApi.WindowsService
                 });
             });
 
+
             var consumeObserver = new ConsoleLogConsumeObserver();
 
             bus.ConnectConsumeObserver(consumeObserver);
 
-            
+
             //TODO: See how to do versioning of messages (best practices)
             //http://masstransit.readthedocs.io/en/master/overview/versioning.html
 
@@ -63,13 +69,13 @@ namespace PizzaApi.WindowsService
                 bus.Start();
                 Console.WriteLine("Saga active.. Press enter to exit");
 
-                GlobalConfiguration.Configuration
-                .UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True");
+                //GlobalConfiguration.Configuration
+                //.UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True");
 
-                hangfireServer = new BackgroundJobServer();
-                Console.WriteLine("Hangfire Server started. Press any key to exit...");
+                //hangfireServer = new BackgroundJobServer();
+                //Console.WriteLine("Hangfire Server started. Press any key to exit...");
 
-                WebApp.Start<Startup>("http://localhost:1235");
+                //WebApp.Start<Startup>("http://localhost:1235");
 
                 Console.ReadLine();
             }

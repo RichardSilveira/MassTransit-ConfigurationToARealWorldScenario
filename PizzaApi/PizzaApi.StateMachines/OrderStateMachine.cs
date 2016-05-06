@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MassTransit.Logging;
 
 namespace PizzaApi.StateMachines
 {
@@ -28,6 +29,10 @@ namespace PizzaApi.StateMachines
                 When(RegisterOrder)
                     .Then(context =>
                     {
+                        var log = Logger.Get("logfile");
+                        log.Info(context);
+                        log.InfoFormat("Register Order {0}", "register");
+
                         //throw new ArgumentException("Test for monitoring sagas");
 
                         context.Instance.OrderID = context.Data.OrderID;
@@ -43,7 +48,12 @@ namespace PizzaApi.StateMachines
                 When(ApproveOrder)
                     .Then(context =>
                     {
+                        var log = Logger.Get("logfile");
+                        log.InfoFormat("Approve Order {0}", "register");                        
+
                         //throw new ArgumentException("Test for monitoring sagas");
+                        //log.Error(context);
+
                         context.Instance.EstimatedTime = context.Data.EstimatedTime;
                         context.Instance.Status = context.Data.Status;
 

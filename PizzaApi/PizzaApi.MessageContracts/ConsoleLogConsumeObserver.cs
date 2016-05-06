@@ -11,10 +11,11 @@ namespace PizzaApi.MessageContracts
 {
     public class ConsoleLogConsumeObserver : IConsumeObserver
     {
+        //private static Logger logger = LogManager.GetCurrentClassLogger();
         public async Task ConsumeFault<T>(ConsumeContext<T> context, Exception exception) where T : class
         {
             var messageContext = JsonConvert.SerializeObject(context.Message);
-
+            
             await Console.Out.WriteLineAsync("Error on CONSUME: " + messageContext + "with exception: " + exception.Message);
         }
 
@@ -22,6 +23,7 @@ namespace PizzaApi.MessageContracts
         {
             var messageContext = JsonConvert.SerializeObject(context.Message);
 
+            
             await Console.Out.WriteLineAsync("ConsumeObserver - PostConsume Observed with context: " + messageContext);
         }
 
