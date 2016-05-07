@@ -13,6 +13,8 @@ using Microsoft.Owin.Hosting;
 using MassTransit.NLogIntegration;
 using MassTransit.Logging;
 using NLog;
+using PizzaApi.MessageContracts;
+using MassTransit.BusConfigurators;
 
 namespace PizzaApi.WindowsService
 {
@@ -27,9 +29,11 @@ namespace PizzaApi.WindowsService
             var repo = new InMemorySagaRepository<Order>();
 
             BackgroundJobServer hangfireServer = null;
+            var busObserver = new BusObserver();
 
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
+                cfg.AddBusFactorySpecification(new BusObserverSpecification(() => busObserver));
 
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
@@ -54,6 +58,7 @@ namespace PizzaApi.WindowsService
 
                     e.StateMachineSaga(saga, repo);
                 });
+
             });
 
 

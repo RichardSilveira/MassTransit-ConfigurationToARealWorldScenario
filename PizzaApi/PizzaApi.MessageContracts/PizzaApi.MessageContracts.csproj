@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusConfigurator.cs" />
+    <Compile Include="BusObserver.cs" />
+    <Compile Include="BusObserverExtensions.cs" />
     <Compile Include="ConsoleLogConsumeObserver.cs" />
     <Compile Include="ConsoleLogPublishObserver.cs" />
     <Compile Include="ConsoleLogSendObserver.cs" />

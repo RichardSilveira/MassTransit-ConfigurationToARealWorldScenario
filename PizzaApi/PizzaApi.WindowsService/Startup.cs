@@ -15,7 +15,7 @@ namespace PizzaApi.WindowsService
     {
         public void Configuration(IAppBuilder app)
         {
-            var storage = new SqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True");
+            var storage = new SqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Persist Security Info=True;User ID=sa;Password=123456");
             app.UseHangfireDashboard("/hangfire-masstransit", new DashboardOptions(), storage);
         }
     }
