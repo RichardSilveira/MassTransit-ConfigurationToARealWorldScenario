@@ -75,13 +75,13 @@ namespace PizzaApi.WindowsService
                 bus.Start();
                 Console.WriteLine("Saga active.. Press enter to exit");
 
-                //GlobalConfiguration.Configuration
-                //.UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True");
+                GlobalConfiguration.Configuration
+                .UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True;User ID=sa;Password=123456");
 
-                //hangfireServer = new BackgroundJobServer();
-                //Console.WriteLine("Hangfire Server started. Press any key to exit...");
+                hangfireServer = new BackgroundJobServer();
+                Console.WriteLine("Hangfire Server started. Press any key to exit...");
 
-                //WebApp.Start<Startup>("http://localhost:1235");
+                WebApp.Start<Startup>("http://localhost:1235");
 
                 Console.ReadLine();
             }
