@@ -15,6 +15,7 @@ using MassTransit.Logging;
 using NLog;
 using PizzaApi.MessageContracts;
 using MassTransit.BusConfigurators;
+using Hangfire.Mongo;
 
 namespace PizzaApi.WindowsService
 {
@@ -75,8 +76,9 @@ namespace PizzaApi.WindowsService
                 bus.Start();
                 Console.WriteLine("Saga active.. Press enter to exit");
 
-                GlobalConfiguration.Configuration
-                .UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True;User ID=sa;Password=123456");
+                //GlobalConfiguration.Configuration
+                //.UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True;User ID=sa;Password=123456");
+                GlobalConfiguration.Configuration.UseMongoStorage("mongodb://localhost:27017", "hangfire-masstransit");
 
                 hangfireServer = new BackgroundJobServer();
                 Console.WriteLine("Hangfire Server started. Press any key to exit...");

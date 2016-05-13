@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Hangfire.Mongo;
 using Hangfire.SqlServer;
 using Microsoft.Owin;
 using Owin;
@@ -14,8 +15,10 @@ namespace PizzaApi.WindowsService
     public class Startup
     {
         public void Configuration(IAppBuilder app)
-        {
-            var storage = new SqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Persist Security Info=True;User ID=sa;Password=123456");
+        {            
+            var storage = new MongoStorage("mongodb://localhost:27017", "hangfire-masstransit");
+
+            //var storage = new SqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Persist Security Info=True;User ID=sa;Password=123456");
             app.UseHangfireDashboard("/hangfire-masstransit", new DashboardOptions(), storage);
         }
     }
