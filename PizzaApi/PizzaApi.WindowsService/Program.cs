@@ -16,6 +16,7 @@ using NLog;
 using PizzaApi.MessageContracts;
 using MassTransit.BusConfigurators;
 using Hangfire.Mongo;
+using Topshelf;
 
 namespace PizzaApi.WindowsService
 {
@@ -85,7 +86,23 @@ namespace PizzaApi.WindowsService
 
                 WebApp.Start<Startup>("http://localhost:1235");
 
-                Console.ReadLine();
+                //TopShelf first tests...
+                HostFactory.Run(x =>
+                {
+                    x.Service<SagaService>(s =>
+                    {
+                        s.ConstructUsing(name => new SagaService());
+                        s.WhenStarted(tc => tc.Start());
+                        s.WhenStopped(tc => tc.Stop());
+                    });
+                    x.RunAsNetworkService();
+
+                    x.SetDescription("Saga Repository - Order State Machine");
+                    x.SetDisplayName("Saga Repository - Order State Machine");
+                    x.SetServiceName("Saga Repository - Order State Machine");
+                });
+
+                //Console.ReadLine();
             }
             catch (Exception exc)
             {
