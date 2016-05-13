@@ -15,6 +15,8 @@ namespace PizzaApi.StateMachines
     {
         public OrderStateMachine()
         {
+            Logger.Get("mongoCustomLog").InfoFormat("OrderStateMachine ctor");
+
             InstanceState(x => x.CurrentState);
 
             Event(() => RegisterOrder,
@@ -39,7 +41,7 @@ namespace PizzaApi.StateMachines
                         context.Instance.CustomerPhone = context.Data.CustomerPhone;
                         context.Instance.PizzaID = context.Data.PizzaID;
 
-                        Logger.Get("logfile").InfoFormat("Register Order {0}", JsonConvert.SerializeObject(context.Instance));
+                        Logger.Get("mongoCustomLog").InfoFormat("Register Order {0}", JsonConvert.SerializeObject(context.Instance));
                     })
                     .TransitionTo(Registered)
                     .Publish(context => new OrderRegisteredEvent(context.Instance))
@@ -60,7 +62,7 @@ namespace PizzaApi.StateMachines
                         BackgroundJob.Schedule(() => Console.WriteLine("Send notification to client: Pay attention please. Your order is near to be done!"),
                                                         TimeSpan.FromSeconds(delayedTimeInSeconds));
 
-                        Logger.Get("logfile").InfoFormat("Approve Order {0}", JsonConvert.SerializeObject(context.Instance));
+                        Logger.Get("mongoCustomLog").InfoFormat("Approve Order {0}", JsonConvert.SerializeObject(context.Instance));
                     })
                     .ThenAsync(async context =>
                     {
@@ -77,7 +79,7 @@ namespace PizzaApi.StateMachines
                         context.Instance.Updated = context.Data.Timestamp;
                         context.Instance.RejectedReasonPhrase = context.Data.RejectedReasonPhrase;
 
-                        Logger.Get("logfile").InfoFormat("Reject Order {0}", JsonConvert.SerializeObject(context.Instance));
+                        Logger.Get("mongoCustomLog").InfoFormat("Reject Order {0}", JsonConvert.SerializeObject(context.Instance));
                     })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer {1} about your order status 'REJECTED', reason: {2}.",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone, context.Instance.RejectedReasonPhrase)))
@@ -92,7 +94,7 @@ namespace PizzaApi.StateMachines
                         context.Instance.Updated = context.Data.Timestamp;
                         context.Instance.Status = context.Data.Status;
 
-                        Logger.Get("logfile").InfoFormat("Close Order {0}", JsonConvert.SerializeObject(context.Instance));
+                        Logger.Get("mongoCustomLog").InfoFormat("Close Order {0}", JsonConvert.SerializeObject(context.Instance));
                     })
                     .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
                                                                                                 context.Instance.CustomerName, context.Instance.CustomerPhone)))
