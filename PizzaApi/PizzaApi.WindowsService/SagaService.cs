@@ -24,10 +24,10 @@ namespace PizzaApi.WindowsService
 {
     public class SagaService : ServiceControl
     {
-        private IBusControl bus;//_busControl;
+        private IBusControl _busControl;
         private BusHandle _busHandle;
 
-        private IBusObserver busObserver;
+        private IBusObserver _busObserver;
 
         private BackgroundJobServer hangfireServer;
 
@@ -36,12 +36,11 @@ namespace PizzaApi.WindowsService
             var saga = new OrderStateMachine();
             var repo = new InMemorySagaRepository<Order>();
 
-            hangfireServer = null;
-            var busObserver = new BusObserver();
+            _busObserver = new BusObserver();
 
-            bus = BusConfigurator.ConfigureBus((cfg, host) =>
+            _busControl = BusConfigurator.ConfigureBus((cfg, host) =>
             {
-                cfg.AddBusFactorySpecification(new BusObserverSpecification(() => busObserver));
+                cfg.AddBusFactorySpecification(new BusObserverSpecification(() => _busObserver));
 
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
                 {
@@ -70,18 +69,16 @@ namespace PizzaApi.WindowsService
 
             var consumeObserver = new ConsoleLogConsumeObserver();
 
-            bus.ConnectConsumeObserver(consumeObserver);
+            _busControl.ConnectConsumeObserver(consumeObserver);
 
             //TODO: See how to do versioning of messages (best practices)
             //http://masstransit.readthedocs.io/en/master/overview/versioning.html
 
             try
             {
-                _busHandle = bus.Start();
+                _busHandle = _busControl.Start();
                 Console.WriteLine("Saga active.. Press enter to exit");
 
-                //GlobalConfiguration.Configuration
-                //.UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True;User ID=sa;Password=123456");
                 GlobalConfiguration.Configuration.UseMongoStorage("mongodb://localhost:27017", "hangfire-masstransit");
 
                 hangfireServer = new BackgroundJobServer();
@@ -89,10 +86,10 @@ namespace PizzaApi.WindowsService
 
                 WebApp.Start<Startup>("http://localhost:1235");
             }
-            catch (Exception exc)
+            catch
             {
                 hangfireServer.Dispose();
-                bus.Stop();
+                _busControl.Stop();
 
                 throw;
             }
@@ -105,7 +102,7 @@ namespace PizzaApi.WindowsService
             if (_busHandle != null)
                 _busHandle.Stop();
 
-            if(hangfireServer != null)
+            if (hangfireServer != null)
                 hangfireServer.Dispose();
 
             return true;
