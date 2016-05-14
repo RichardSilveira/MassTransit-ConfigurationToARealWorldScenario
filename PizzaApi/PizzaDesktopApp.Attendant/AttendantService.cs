@@ -9,18 +9,11 @@ using Topshelf;
 
 namespace PizzaDesktopApp.Attendant
 {
-    class Program
+    public class AttendantService : ServiceControl
     {
-        static void Main(string[] args)
-        {
-            BusConfigurationForAttendanteApp.Configure();
-            //return (int)HostFactory.Run(x => x.Service<AttendantService>());
-        }
-    }
+        private BusHandle _busHandle;
 
-    public static class BusConfigurationForAttendanteApp
-    {
-        public static void Configure()
+        public bool Start(HostControl hostControl)
         {
             var bus = BusConfigurator.ConfigureBus((cfg, host) =>
             {
@@ -47,12 +40,17 @@ namespace PizzaDesktopApp.Attendant
             var consumeObserver = new ConsoleLogConsumeObserver();
             bus.ConnectConsumeObserver(consumeObserver);
 
-            bus.Start();
+            _busHandle = bus.Start();
 
-            Console.WriteLine("Listening for Register order commands.. Press enter to exit");
-            Console.ReadLine();
+            return true;
+        }
 
-            bus.Stop();
+        public bool Stop(HostControl hostControl)
+        {
+            if (_busHandle != null)
+                _busHandle.Stop();
+
+            return true;
         }
     }
 }

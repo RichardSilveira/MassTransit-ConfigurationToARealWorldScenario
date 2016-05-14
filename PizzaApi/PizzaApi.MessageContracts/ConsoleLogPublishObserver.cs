@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using MassTransit.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,25 @@ namespace PizzaApi.MessageContracts
 {
     public class ConsoleLogPublishObserver : IPublishObserver
     {
-        public async Task PostPublish<T>(PublishContext<T> context) where T : class
+        public Task PostPublish<T>(PublishContext<T> context) where T : class
         {
             var messageContext = JsonConvert.SerializeObject(context.Message);
 
-            await Console.Out.WriteLineAsync("PublishObserver - PostPublish Observed with context: " + messageContext);
+            return Task.Run(() => Logger.Get("mongoCustomLog").InfoFormat("PublishObserver - PostPublish Observed with context: " + messageContext));
         }
 
-        public async Task PrePublish<T>(PublishContext<T> context) where T : class
+        public Task PrePublish<T>(PublishContext<T> context) where T : class
         {
             var messageContext = JsonConvert.SerializeObject(context.Message);
 
-            await Console.Out.WriteLineAsync("PrePublish - PostPublish Observed with context: " + messageContext);
+            return Task.Run(() => Logger.Get("mongoCustomLog").InfoFormat("PrePublish - PostPublish Observed with context: " + messageContext));
         }
 
-        public async Task PublishFault<T>(PublishContext<T> context, Exception exception) where T : class
+        public Task PublishFault<T>(PublishContext<T> context, Exception exception) where T : class
         {
             var messageContext = JsonConvert.SerializeObject(context.Message);
 
-            await Console.Out.WriteLineAsync("Error on PUBLISH: " + messageContext + "with exception: " + exception.Message);
+            return Task.Run(() => Logger.Get("mongoCustomLog").ErrorFormat("Error on PUBLISH: " + messageContext + "with exception: " + exception.Message));
         }
     }
 }
