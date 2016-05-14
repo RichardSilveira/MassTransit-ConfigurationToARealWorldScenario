@@ -17,6 +17,7 @@ using PizzaApi.MessageContracts;
 using MassTransit.BusConfigurators;
 using Hangfire.Mongo;
 using Topshelf;
+using Topshelf.Runtime;
 
 namespace PizzaApi.WindowsService
 {
@@ -26,89 +27,33 @@ namespace PizzaApi.WindowsService
 
         static void Main(string[] args)
         {
-            Console.Title = "Saga";
-            var saga = new OrderStateMachine();
-            var repo = new InMemorySagaRepository<Order>();
-
-            BackgroundJobServer hangfireServer = null;
-            var busObserver = new BusObserver();
-
-            var bus = BusConfigurator.ConfigureBus((cfg, host) =>
+            HostFactory.Run(x =>
             {
-                cfg.AddBusFactorySpecification(new BusObserverSpecification(() => busObserver));
+                x.Service<SagaService>();
 
-                cfg.ReceiveEndpoint(host, RabbitMqConstants.SagaQueue, e =>
+                x.UseNLog();
+                x.DependsOn("RabbitMQ");
+
+                x.RunAsLocalSystem();
+                x.StartAutomatically();
+
+                x.SetDescription("Saga Service - Pizza API Order State Machine");
+                x.SetDisplayName("Saga Service - Pizza API Order State Machine");
+                x.SetServiceName("Saga Service - Pizza API Order State Machine");
+
+                //x.EnablePauseAndContinue();
+
+                x.EnableServiceRecovery(r =>
                 {
-                    cfg.UseNLog(new LogFactory());
+                    r.RestartService(1);
 
-                    cfg.EnablePerformanceCounters();
-
-                    e.UseRetry(Retry.Interval(5, TimeSpan.FromSeconds(5)));
-
-
-                    e.UseCircuitBreaker(cb =>
-                    {
-                        cb.TripThreshold = 15;
-                        cb.ResetInterval(TimeSpan.FromMinutes(5));
-                        cb.TrackingPeriod = TimeSpan.FromMinutes(1);
-                        cb.ActiveThreshold = 10;
-                    });
-
-                    //e.UseRetry(Retry.Except(typeof(ArgumentException),
-                    //    typeof(NotAcceptedStateMachineException)).Interval(10, TimeSpan.FromSeconds(5)));
-                    //TODO: Create a custom filter policy for inner exceptions on Sagas: http://stackoverflow.com/questions/37041293/how-to-use-masstransits-retry-policy-with-sagas
-
-                    e.StateMachineSaga(saga, repo);
+                    //number of days until the error count resets
+                    r.SetResetPeriod(1);
                 });
-
             });
 
-
-            var consumeObserver = new ConsoleLogConsumeObserver();
-
-            bus.ConnectConsumeObserver(consumeObserver);
-
-
-            //TODO: See how to do versioning of messages (best practices)
-            //http://masstransit.readthedocs.io/en/master/overview/versioning.html
-
-            try
-            {
-                bus.Start();
-                Console.WriteLine("Saga active.. Press enter to exit");
-
-                //GlobalConfiguration.Configuration
-                //.UseSqlServerStorage(@"Data Source=.\SQLEXPRESS;Initial Catalog=hangfire-masstransit;Integrated Security=True;User ID=sa;Password=123456");
-                GlobalConfiguration.Configuration.UseMongoStorage("mongodb://localhost:27017", "hangfire-masstransit");
-
-                hangfireServer = new BackgroundJobServer();
-                Console.WriteLine("Hangfire Server started. Press any key to exit...");
-
-                WebApp.Start<Startup>("http://localhost:1235");
-
-                //TopShelf first tests...
-                HostFactory.Run(x =>
-                {
-                    x.Service<SagaService>(s =>
-                    {
-                        s.ConstructUsing(name => new SagaService());
-                        s.WhenStarted(tc => tc.Start());
-                        s.WhenStopped(tc => tc.Stop());
-                    });
-                    x.RunAsNetworkService();
-
-                    x.SetDescription("Saga Repository - Order State Machine");
-                    x.SetDisplayName("Saga Repository - Order State Machine");
-                    x.SetServiceName("Saga Repository - Order State Machine");
-                });
-
-                //Console.ReadLine();
-            }
-            catch (Exception exc)
-            {
-                hangfireServer.Dispose();
-                bus.Stop();
-            }
+            //TODO:Enable Pause and continue (Stop the bus but don't stop the hangfire server)
+            //Console.ReadLine();
         }
     }
 }
