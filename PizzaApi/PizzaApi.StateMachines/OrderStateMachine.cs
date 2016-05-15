@@ -68,8 +68,8 @@ namespace PizzaApi.StateMachines
                     {
                         //throw new ArgumentException("Test for monitoring sagas");
 
-                        await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'APPROVED'.",
-                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone));
+                        await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with order id: {1} about your order status 'APPROVED'.",
+                                                                                                context.Instance.CustomerName, context.Instance.OrderID));
                     })
                     .TransitionTo(Approved),
                 //.Publish(context => new OrderApprovedEvent(context.Instance))//In this scenario, i don´t need of this event...
@@ -81,8 +81,8 @@ namespace PizzaApi.StateMachines
 
                         Logger.Get("mongoCustomLog").InfoFormat("Reject Order {0}", JsonConvert.SerializeObject(context.Instance));
                     })
-                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer {1} about your order status 'REJECTED', reason: {2}.",
-                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone, context.Instance.RejectedReasonPhrase)))
+                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with order id {1} about your order status 'REJECTED', reason: {2}.",
+                                                                                                context.Instance.CustomerName, context.Instance.OrderID, context.Instance.RejectedReasonPhrase)))
                     .Finalize()
                 );
 
@@ -96,8 +96,8 @@ namespace PizzaApi.StateMachines
 
                         Logger.Get("mongoCustomLog").InfoFormat("Close Order {0}", JsonConvert.SerializeObject(context.Instance));
                     })
-                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with phone numer: {1} about your order status 'CLOSED'",
-                                                                                                context.Instance.CustomerName, context.Instance.CustomerPhone)))
+                    .ThenAsync(async context => await Console.Out.WriteLineAsync(string.Format("Send notification to client {0} with order id: {1} about your order status 'CLOSED'",
+                                                                                                context.Instance.CustomerName, context.Instance.OrderID)))
                     .Finalize()
                 );
 

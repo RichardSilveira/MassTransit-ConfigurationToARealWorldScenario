@@ -61,9 +61,9 @@
   <ItemGroup>
     <Compile Include="BusConfigurator.cs" />
     <Compile Include="BusObserver.cs" />
-    <Compile Include="ConsoleLogConsumeObserver.cs" />
-    <Compile Include="ConsoleLogPublishObserver.cs" />
-    <Compile Include="ConsoleLogSendObserver.cs" />
+    <Compile Include="LogConsumeObserver.cs" />
+    <Compile Include="LogPublishObserver.cs" />
+    <Compile Include="LogSendObserver.cs" />
     <Compile Include="IApproveOrderCommand.cs" />
     <Compile Include="IClosedOrderEvent.cs" />
     <Compile Include="ICloseOrderCommand.cs" />

@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MassTransit;
 using Topshelf;
+using NLog;
+using MassTransit.NLogIntegration;
+using MassTransit.Logging;
 
 namespace PizzaDesktopApp.Attendant
 {
@@ -19,7 +22,9 @@ namespace PizzaDesktopApp.Attendant
             {
                 cfg.ReceiveEndpoint(host, RabbitMqConstants.RegisterOrderServiceQueue, e =>
                 {
-                    e.UseRateLimit(100, TimeSpan.FromSeconds(1));
+                    cfg.UseNLog(new LogFactory());
+
+                    e.UseRateLimit(1, TimeSpan.FromSeconds(30));
 
                     e.UseRetry(Retry.Interval(5, TimeSpan.FromSeconds(5)));
 
@@ -32,12 +37,11 @@ namespace PizzaDesktopApp.Attendant
                     });
 
                     e.Consumer<OrderRegisteredConsumer>();
-                    //x.UseLog(ConsoleOut, async context => "Consumer created");
 
                 });
             });
 
-            var consumeObserver = new ConsoleLogConsumeObserver();
+            var consumeObserver = new LogConsumeObserver();
             bus.ConnectConsumeObserver(consumeObserver);
 
             _busHandle = bus.Start();

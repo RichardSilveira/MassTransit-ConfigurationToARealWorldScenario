@@ -11,48 +11,9 @@ namespace PizzaDesktopApp.Attendant
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            BusConfigurationForAttendanteApp.Configure();
-            //return (int)HostFactory.Run(x => x.Service<AttendantService>());
-        }
-    }
-
-    public static class BusConfigurationForAttendanteApp
-    {
-        public static void Configure()
-        {
-            var bus = BusConfigurator.ConfigureBus((cfg, host) =>
-            {
-                cfg.ReceiveEndpoint(host, RabbitMqConstants.RegisterOrderServiceQueue, e =>
-                {
-                    e.UseRateLimit(100, TimeSpan.FromSeconds(1));
-
-                    e.UseRetry(Retry.Interval(5, TimeSpan.FromSeconds(5)));
-
-                    e.UseCircuitBreaker(cb =>
-                    {
-                        cb.TripThreshold = 15;
-                        cb.ResetInterval(TimeSpan.FromMinutes(5));
-                        cb.TrackingPeriod = TimeSpan.FromMinutes(1);
-                        cb.ActiveThreshold = 10;
-                    });
-
-                    e.Consumer<OrderRegisteredConsumer>();
-                    //x.UseLog(ConsoleOut, async context => "Consumer created");
-
-                });
-            });
-
-            var consumeObserver = new ConsoleLogConsumeObserver();
-            bus.ConnectConsumeObserver(consumeObserver);
-
-            bus.Start();
-
-            Console.WriteLine("Listening for Register order commands.. Press enter to exit");
-            Console.ReadLine();
-
-            bus.Stop();
+            return (int)HostFactory.Run(x => x.Service<AttendantService>());
         }
     }
 }

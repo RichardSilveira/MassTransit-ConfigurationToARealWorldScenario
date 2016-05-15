@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PizzaApi.MessageContracts
 {
-    public class ConsoleLogConsumeObserver : IConsumeObserver
+    public class LogConsumeObserver : IConsumeObserver
     {
         //private static Logger logger = LogManager.GetCurrentClassLogger();
         public Task ConsumeFault<T>(ConsumeContext<T> context, Exception exception) where T : class

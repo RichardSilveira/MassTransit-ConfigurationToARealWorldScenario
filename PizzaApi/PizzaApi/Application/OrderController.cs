@@ -35,8 +35,6 @@ namespace PizzaApi.Application
             _baseUri = ConfigurationManager.AppSettings["Root"] + @"/api/order/";
 
             _bus = BusConfigurator.ConfigureBus();
-            var publishObserver = new ConsoleLogPublishObserver();
-            _bus.ConnectPublishObserver(publishObserver);
 
             _sendToUri = new Uri(RabbitMqConstants.RabbitMqUri + RabbitMqConstants.SagaQueue);
         }

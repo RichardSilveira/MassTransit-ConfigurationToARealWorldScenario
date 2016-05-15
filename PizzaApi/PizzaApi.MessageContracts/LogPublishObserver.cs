@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PizzaApi.MessageContracts
 {
-    public class ConsoleLogPublishObserver : IPublishObserver
+    public class LogPublishObserver : IPublishObserver
     {
         public Task PostPublish<T>(PublishContext<T> context) where T : class
         {

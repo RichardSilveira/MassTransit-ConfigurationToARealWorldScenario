@@ -16,14 +16,14 @@ namespace PizzaDesktopApp.Attendant
             {
                 //throw new Exception("Test for monitoring consume observer on fault method");
 
-                Console.Write(string.Format("The customer {0} made an order (ID: {1}) for pizza ID {2}. Did you want to approve this order? Answer bellow - Y/N",
+                Console.Write(string.Format("The customer {0} made an order (ID: {1}) for pizza ID {2}. Did you want to approve this order? Y/N: ",
                                                         context.Message.CustomerName, context.Message.OrderID, context.Message.PizzaID));
                 var attendantChoice = Console.ReadLine();
 
                 switch (attendantChoice.ToUpper())
                 {
                     case "Y":
-                        Console.Write("What is the estimated time for this order (in minutes)? :");
+                        Console.Write("What is the estimated time for this order (in minutes)? : ");
                         var estimatedTime = Console.ReadLine();
 
                         //For tests (to verify 'UseRetry' and Circuit Breaker in action)
@@ -36,7 +36,7 @@ namespace PizzaDesktopApp.Attendant
 
                         break;
                     case "N":
-                        Console.Write("Why do you want do reject this order? :");
+                        Console.Write("Why do you want do reject this order? : ");
                         string reasonPhrase = "\"" + Console.ReadLine() + "\"";
 
                         var responseToReject = await AttendantApplicationActions.RejectOrder(new { OrderID = context.Message.OrderID, ReasonPhrase = reasonPhrase });
@@ -57,8 +57,7 @@ namespace PizzaDesktopApp.Attendant
             }
             finally
             {
-                Console.WriteLine("Press enter to exit (and finalize the current queue consumer");
-                Console.ReadLine();
+                Console.WriteLine("Don't write anything on console, wait for 30 seconds...");
             }
         }
     }
