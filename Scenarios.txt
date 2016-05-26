@@ -2,22 +2,23 @@
 Simulating an online request for pizzas
 =======================================
 
-The user sends a order;
-The order is received 
-	- order status could be either approved or rejected
-	- if order is approved, an estimated time should be set;
+* The user sends an order.
 
-The order is done;
+* The order is received.
+	- The order status could be either approved or rejected by the attendant.
+	- If the order is approved, an estimated time should be informed.
+	- If the order is rejected, an reason phrase should be informed.
 
+* The order is done.
 
-* Schedule messages to user when:
-	- his order is either approved or rejected
-	- his order is about fifteen minutes to be done
-	- his order is done (through order status update to 'done');
+* Schedule messages to be sent to user when:
+	- His order is either approved or rejected.
+	- His order is near to be done.
+	- His order is done (through order status update to _done_).
 
 ---------------------------------------
 Technical requirements
 ---------------------------------------
 
-Use Sagas State machine over order status updates;
-Use MongoDb for save queues durable's data;
+Use Sagas state machine over order status updates;
+Use MongoDb for save all kinds of application data;
