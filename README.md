@@ -40,4 +40,4 @@ Please, criticize and give suggestions , this project was created for this, this
 
 
 ===
-_Special thansk to [Crhis Patterson](https://github.com/phatboyg) by your really fast support on stackoverflow over all my questions._
+_Special thanks to [Crhis Patterson](https://github.com/phatboyg) by your really fast support on stackoverflow over all my questions._
